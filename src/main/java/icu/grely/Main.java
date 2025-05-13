@@ -8,13 +8,16 @@ import arc.mock.MockFiles;
 import arc.struct.Seq;
 import arc.util.Log;
 import icu.grely.bot.Loader;
+import icu.grely.logger.LoggerProvider;
+import reactor.util.Loggers;
 
 import static icu.grely.SettingsLoader.saveSettings;
-import static icu.grely.logger.Logger.loadLogger;
+import static icu.grely.logger.BLogger.loadLogger;
 
 public class Main {
     public static void main(String[] args) {
         loadLogger();
+        Loggers.useCustomLoggers(new LoggerProvider());
         Log.info("Loading...");
         loadSettings();
         loadApp();

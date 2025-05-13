@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Vars {
     // main
-    public static boolean debug;
+    public static boolean debug, d4jdebug;
     // spec.
     public static final Dotenv dotenv = Dotenv.load();
     public static final Random random = new Random();

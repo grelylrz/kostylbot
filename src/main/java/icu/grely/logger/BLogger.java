@@ -4,7 +4,7 @@ import arc.util.Log;
 
 import static icu.grely.Vars.*;
 
-public class Logger {
+public class BLogger {
     static boolean loadedLogger;
     public static void loadLogger() {
         if (loadedLogger) return;
