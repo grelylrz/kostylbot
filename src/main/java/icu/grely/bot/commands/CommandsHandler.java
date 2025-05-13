@@ -74,59 +74,50 @@ public class CommandsHandler {
             if(command != null) {
                 handledCommands+=1;
                 // Arrays.copyOfRange(args, 1, args.length)
-                if (!command.getAliases().isEmpty()) {
-                    String[] commandArgs = command.getArgsN().split(" ");
+                if (!command.getArgsN().isEmpty()) {
                     boolean allValid = true;
-
-                    int requiredIndex = 0;
-                    int userArgIndex = 0;
-
-                    while (requiredIndex < commandArgs.length) {
-                        String carg = commandArgs[requiredIndex];
-
-                        boolean isRequired = carg.startsWith("<") && carg.endsWith(">");
-                        boolean isOptional = carg.startsWith("[") && carg.endsWith("]");
-                        boolean isMultiple = carg.endsWith("...>") || carg.endsWith("...]");
-
-                        if (isRequired) {
-                            if (isMultiple) {
-                                // <arg...> → обязательно хотя бы один аргумент, можно больше
-                                if (userArgIndex >= args.length) {
-                                    allValid = false;
-                                    break;
-                                }
-                                // всё остальное — часть мультиарга, можно завершить
-                                break;
-                            } else {
-                                // <arg> → один обязательный арг
-                                if (userArgIndex >= args.length) {
-                                    allValid = false;
-                                    break;
-                                }
-                                userArgIndex++;
-                            }
-                        } else if (isOptional) {
-                            if (isMultiple) {
-                                // [arg...] → необязательный мульти арг, можно игнорировать
-                                break;
-                            } else {
-                                // [arg] → один необязательный арг, если есть — берём
-                                if (userArgIndex < args.length) {
-                                    userArgIndex++;
-                                }
-                                // если нет — пропускаем
-                            }
+                    String[] defArgs = command.getArgsN().split(" ");
+                    int defIndex = 0;
+                    int userIndex = 0;
+                    while (true) {
+                        if (defIndex >= defArgs.length && userIndex < args.length) {
+                            allValid = false;
+                            break;
+                        }
+                        if (userIndex >= args.length) {
+                            break;
                         }
 
-                        requiredIndex++;
-                    }
+                        String def = defArgs[defIndex];
+                        boolean isRequired = def.startsWith("<") && def.endsWith(">");
+                        boolean isOptional = def.startsWith("[") && def.endsWith("]");
+                        boolean isVariadic = def.contains("...");
 
-                    // Если пользователь ввел больше аргументов, чем возможно
-                    if (userArgIndex < args.length) {
-                        // если последний был мультиарг — норм
-                        String lastArg = commandArgs[commandArgs.length - 1];
-                        boolean lastIsMultiple = lastArg.endsWith("...>") || lastArg.endsWith("...]");
-                        if (!lastIsMultiple) {
+                        if (isVariadic) {
+                            if (isRequired && userIndex >= args.length) {
+                                allValid = false;
+                                break;
+                            }
+                            userIndex = args.length;
+                            break;
+                        } else {
+                            if (userIndex >= args.length) {
+                                if (isRequired) {
+                                    allValid = false;
+                                    break;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            userIndex++;
+                        }
+
+                        defIndex++;
+                    }
+                    if (userIndex < args.length) {
+                        String lastDef = defArgs[defArgs.length - 1];
+                        if (!lastDef.contains("...")) {
                             allValid = false;
                         }
                     }
@@ -135,6 +126,7 @@ public class CommandsHandler {
                         sendReply(event.getMessage(), "Invalid args!");
                         return;
                     }
+
                 }
 
                 if(command.getMemberID() == 0) {
