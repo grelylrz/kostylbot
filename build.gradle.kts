@@ -31,9 +31,12 @@ tasks.test {
     useJUnitPlatform()
 }
 tasks.jar {
+    archiveFileName.set("${project.archivesBaseName}.jar")
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     manifest {
         attributes(
             "Main-Class" to "icu.grely.Main"
         )
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
