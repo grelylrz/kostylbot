@@ -30,3 +30,10 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "icu.grely.Main"
+        )
+    }
+}
