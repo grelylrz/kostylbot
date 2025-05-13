@@ -3,6 +3,7 @@ package icu.grely;
 import arc.struct.Seq;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.object.entity.User;
 import icu.grely.annotatins.SaveSetting;
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -27,6 +28,7 @@ public class Vars {
     public static long handledCommands=0;
     @SaveSetting
     public static String presence="Hello, im kostylbot.";
+    public static User owner=null;
     //commands
     public static Seq<String> yesDialogs = Seq.with("✅ Уверен в этом!", "\uD83D\uDC4D Отличная идея!", "\uD83D\uDC4C Звучит хорошо.");
     public static Seq<String> noDialogs = Seq.with("❌ Плохая идея", "\uD83D\uDE35 Даже не думай об этом!", "\uD83D\uDC4E Не думаю, что это кончится хорошо.");

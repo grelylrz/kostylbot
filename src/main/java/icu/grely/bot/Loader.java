@@ -31,6 +31,10 @@ public class Loader {
         // end commands
         gateway.getApplicationInfo().flatMap(a->{
             Log.info("Running as @", a.getName());
+            a.getOwner().flatMap(o->{
+                owner=o;
+                return Mono.empty();
+            }).subscribe();
             return Mono.empty();
         }).subscribe();
         gateway.on(MessageCreateEvent.class, event -> {

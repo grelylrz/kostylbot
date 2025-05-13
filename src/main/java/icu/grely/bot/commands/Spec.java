@@ -1,15 +1,18 @@
 package icu.grely.bot.commands;
 
-import static icu.grely.Vars.prefix;
+import static icu.grely.Vars.*;
+import static icu.grely.bot.SendUtils.sendEmbedReply;
 import static icu.grely.bot.SendUtils.sendReply;
 import static icu.grely.bot.commands.CommandsHandler.commands;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
 
 import arc.struct.Seq;
+import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import icu.grely.bot.SendUtils;
+import reactor.core.publisher.Mono;
 
 public class Spec {
     public static void load() {
@@ -51,6 +54,21 @@ public class Spec {
             em.footer("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп", "");
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
+        registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
+            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nВладелец бота: "+ owner.getUsername());
+        }).setAliases("stats");
+        registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
+            Snowflake id;
+            try {
+                id=Snowflake.of(Long.parseLong(args[0]));
+                gateway.getUserById(id).flatMap(u->{
+                    sendEmbedReply(EmbedCreateSpec.builder().image(u.getAvatarUrl()).color(u.getAccentColor().isPresent() ? Color.GRAY : u.getAccentColor().get()).build(), e.getMessage());
+                    return Mono.empty();
+                }).subscribe();
+            } catch (Exception er) {
+                sendReply(e.getMessage(), "Неизвестный пользователь.");
+            }
+        }).setAliases("аватар");
         Fun.load();
     }
 }
