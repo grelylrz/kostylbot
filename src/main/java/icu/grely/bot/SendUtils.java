@@ -92,6 +92,6 @@ public class SendUtils {
                 }).doOnError(Log::err).subscribe();
     }
     public static String getIdByPing(String ping) {
-        return ping.replace("@", "").replace("<", "").replace(">", "").trim();
+        return ping.replace("@", "").replace("<", "").replace(">", "").replace("!", "").trim();
     }
 }
