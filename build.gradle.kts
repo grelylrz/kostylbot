@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.Anuken.Arc:arc-core:v147.1")
+    implementation("com.github.Anuken.Arc:arc-core:v146")
     implementation("com.discord4j:discord4j-core:3.3.0-SNAPSHOT")
     implementation(files("postgresql-42.7.5.jar"))
     implementation("org.reflections:reflections:0.10.2")
@@ -29,4 +29,14 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+tasks.jar {
+    archiveFileName.set("kostyl.jar")
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    manifest {
+        attributes(
+            "Main-Class" to "icu.grely.Main"
+        )
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
