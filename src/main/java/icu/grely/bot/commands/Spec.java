@@ -46,7 +46,7 @@ public class Spec {
                 em.addField("Description", c.getDescription(), false);
                 cname.setLength(0);
             }
-            em.author("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп", "", "");
+            em.footer("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп", "");
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
         Fun.load();
