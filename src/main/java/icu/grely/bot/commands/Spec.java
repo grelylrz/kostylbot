@@ -14,8 +14,9 @@ import icu.grely.bot.SendUtils;
 public class Spec {
     public static void load() {
         registerCommand("help", "Посмотреть список команд.", "[command-name]", (e, args)->{
-            EmbedCreateSpec.Builder em=EmbedCreateSpec.builder().title("Список команд.").color(Color.SEA_GREEN);
+            EmbedCreateSpec.Builder em=EmbedCreateSpec.builder().color(Color.SEA_GREEN);
             if(args.length==0) {
+                em.title("Список команд.")
                 StringBuilder cname = new StringBuilder();
                 for (CommandsHandler.BotCommand c : commands) {
                     if (c.isVisible() && c.isActive()) {
@@ -37,6 +38,7 @@ public class Spec {
                     sendReply(e.getMessage(), "Command not found.");
                     return;
                 }
+                em.title("Подробная информация о команде.");
                 StringBuilder cname = new StringBuilder();
                 cname.append(c.name);
                 for(String n : c.getAliases()) {
