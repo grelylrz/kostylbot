@@ -74,61 +74,6 @@ public class CommandsHandler {
             if(command != null) {
                 handledCommands+=1;
                 // Arrays.copyOfRange(args, 1, args.length)
-                if (!command.getArgsN().isEmpty()) {
-                    boolean allValid = true;
-                    String[] defArgs = command.getArgsN().split(" ");
-                    int defIndex = 0;
-                    int userIndex = 0;
-                    while (true) {
-                        if (defIndex >= defArgs.length && userIndex < args.length) {
-                            allValid = false;
-                            break;
-                        }
-                        if (userIndex >= args.length) {
-                            break;
-                        }
-
-                        String def = defArgs[defIndex];
-                        boolean isRequired = def.startsWith("<") && def.endsWith(">");
-                        boolean isOptional = def.startsWith("[") && def.endsWith("]");
-                        boolean isVariadic = def.contains("...");
-
-                        if (isVariadic) {
-                            if (isRequired && userIndex >= args.length) {
-                                allValid = false;
-                                break;
-                            }
-                            userIndex = args.length;
-                            break;
-                        } else {
-                            if (userIndex >= args.length) {
-                                if (isRequired) {
-                                    allValid = false;
-                                    break;
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            userIndex++;
-                        }
-
-                        defIndex++;
-                    }
-                    if (userIndex < args.length) {
-                        String lastDef = defArgs[defArgs.length - 1];
-                        if (!lastDef.contains("...")) {
-                            allValid = false;
-                        }
-                    }
-
-                    if (!allValid) {
-                        sendReply(event.getMessage(), "Invalid args!");
-                        return;
-                    }
-
-                }
-
                 if(command.getMemberID() == 0) {
                     command.exec(event, Arrays.copyOfRange(args, 1, args.length));
                 } else {

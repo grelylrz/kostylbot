@@ -6,12 +6,17 @@ import discord4j.rest.util.Color;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendEmbedReply;
+import static icu.grely.bot.SendUtils.sendReply;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
 
 public class Fun {
     public static void load() {
         registerCommand("ball", "Покатать шары", "<question...>", (e, args)->{
-            Color color = Color.GRAY;
+            if(args.length==0) {
+                sendReply(e.getMessage(), "Invalid args.");
+                return;
+            }
+            Color color;
             String reply = "";
             StringBuilder sb = new StringBuilder();
             for (String arg : args) {
