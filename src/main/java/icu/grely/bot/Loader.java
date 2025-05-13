@@ -3,6 +3,7 @@ package icu.grely.bot;
 import arc.util.Log;
 import discord4j.core.DiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.channel.ThreadChannel;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.shard.GatewayBootstrap;
@@ -33,6 +34,12 @@ public class Loader {
             return Mono.empty();
         }).subscribe();
         gateway.on(MessageCreateEvent.class, event -> {
+            event.getMessage().getChannel().flatMap(ch->{
+                if (ch instanceof ThreadChannel threadChannel) {
+                    threadChannel.join().subscribe();
+                }
+                return Mono.empty();
+            }).subscribe();
             handleEvent(event);
             return Mono.empty();
         }).subscribe();

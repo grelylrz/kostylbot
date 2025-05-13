@@ -121,5 +121,12 @@ public class CommandsHandler {
         public void exec(MessageCreateEvent e, String[] args) {
             executor.accept(e, args);
         }
+
+        void setAliases(String... aliases) {
+            this.aliases=Seq.with(aliases);
+        }
+        void setAliases(Seq<String> aliases) {
+            this.aliases=aliases;
+        }
     }
 }

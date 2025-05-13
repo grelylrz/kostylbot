@@ -39,6 +39,16 @@ public class Fun {
             sb.setLength(255);
             sendEmbedReply(EmbedCreateSpec.builder().title(sb.toString()).addField("", reply, false).color(color).build(), e.getMessage());
             sb.setLength(0);
-        }).setAliases(Seq.with("balls", "8ball"));
+        }).setAliases(Seq.with("balls", "8ball", "шары", "шар"));
+        registerCommand("coinflip", "Подбросить монетку.", "<question...>", (event, args)->{
+            if(random.nextInt(2)==0) {
+                sendEmbedReply(EmbedCreateSpec.builder().color(Color.LIGHT_SEA_GREEN).addField(String.join(" ", args), "Выпала решка!", false).build(), event.getMessage());
+            } else {
+                sendEmbedReply(EmbedCreateSpec.builder().color(Color.LIGHT_SEA_GREEN).addField(String.join(" ", args), "Выпал орел!", false).build(), event.getMessage());
+            }
+        }).setAliases(Seq.with("монетка"));
+        registerCommand("dice", "Кубик", (e, args)->{
+            sendReply(e.getMessage(), "Выпадает "+random.nextInt(7)+"!");
+        }).setAliases(Seq.with("кубик"));
     }
 }
