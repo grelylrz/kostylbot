@@ -64,10 +64,18 @@ public class Spec {
             Snowflake id;
             try {
                 id=Snowflake.of(Long.parseLong(getIdByPing(args[0])));
-                gateway.getUserById(id).flatMap(u->{
-                    sendEmbedReply(EmbedCreateSpec.builder().image(u.getAvatarUrl()).color(u.getAccentColor().isPresent() ? Color.GREEN : u.getAccentColor().get()).build(), e.getMessage());
-                    return Mono.empty();
-                }).subscribe();
+                gateway.getUserById(id)
+                        .doOnNext(u -> sendEmbedReply(
+                                EmbedCreateSpec.builder()
+                                        .image(u.getAvatarUrl())
+                                        .color(u.getAccentColor().orElse(Color.GREEN))
+                                        .build(),
+                                e.getMessage()
+                        ))
+                        .switchIfEmpty(Mono.fromRunnable(() ->
+                                sendReply(e.getMessage(), "Неизвестный пользователь.")
+                        ))
+                        .subscribe();
             } catch (Exception er) {
                 sendReply(e.getMessage(), "Неизвестный пользователь.");
             }
