@@ -31,7 +31,7 @@ tasks.test {
     useJUnitPlatform()
 }
 tasks.jar {
-    archiveFileName.set("${project.archivesBaseName}.jar")
+    archiveFileName.set("kostyl.jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     manifest {
         attributes(
