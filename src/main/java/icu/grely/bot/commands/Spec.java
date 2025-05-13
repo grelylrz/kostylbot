@@ -16,7 +16,7 @@ public class Spec {
         registerCommand("help", "Посмотреть список команд.", "[command-name]", (e, args)->{
             EmbedCreateSpec.Builder em=EmbedCreateSpec.builder().color(Color.SEA_GREEN);
             if(args.length==0) {
-                em.title("Список команд.")
+                em.title("Список команд.");
                 StringBuilder cname = new StringBuilder();
                 for (CommandsHandler.BotCommand c : commands) {
                     if (c.isVisible() && c.isActive()) {
