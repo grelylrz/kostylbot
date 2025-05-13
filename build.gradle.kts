@@ -33,7 +33,7 @@ tasks.test {
 tasks.jar {
     manifest {
         attributes(
-            "Main-Class" to "icu.grely.Main.main"
+            "Main-Class" to "icu.grely.Main"
         )
     }
 }
