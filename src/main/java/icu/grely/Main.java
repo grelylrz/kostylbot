@@ -21,6 +21,7 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
             Log.info("Saving settings, please, wait.");
             saveSettings();
+            Core.settings.forceSave();
         }));
         Loader.load();
     }
