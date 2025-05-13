@@ -17,10 +17,12 @@ public class Spec {
             StringBuilder cname=new StringBuilder();
             for(CommandsHandler.BotCommand c : commands) {
                 if(c.isVisible() && c.isActive()) {
+                    cname.append(c.getName());
                     for(String alias : c.getAliases())
                         cname.append("/"+alias);
                     // name/alias1/alias2
                     em.addField(cname.toString(), c.getDescription() + "\n" + c.getArgsN(), false);
+                    cname.setLength(0);
                 }
             }
             em.description("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп");

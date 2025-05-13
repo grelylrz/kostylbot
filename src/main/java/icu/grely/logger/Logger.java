@@ -8,7 +8,7 @@ public class Logger {
     static boolean loadedLogger;
     public static void loadLogger() {
         if (loadedLogger) return;
-        // idk how arc Log.debug works.
+        // IDK how arc Log.debug works.
         String[] tags = {
                 "\u001B[32m[D]\u001B[0m",
                 "\u001B[34m[I]\u001B[0m",
@@ -17,7 +17,7 @@ public class Logger {
         };
 
         Log.logger = (level, text) -> {
-            System.out.println(level.toString());
+            //System.out.println(level.toString());
             String result = tags[level.ordinal()] + " " + text;
             System.out.println(result);
         };
