@@ -77,16 +77,60 @@ public class CommandsHandler {
                 if (!command.getAliases().isEmpty()) {
                     String[] commandArgs = command.getArgsN().split(" ");
                     boolean allValid = true;
-                    for (String carg : commandArgs) {
-                        boolean isRequired = carg.startsWith("<") && carg.endsWith(">") && !carg.equals("<>");
-                        boolean isOptional = carg.startsWith("[") && carg.endsWith("]") && !carg.equals("[]");
-                        boolean isMultiWordRequired = carg.startsWith("<") && carg.endsWith("...>") && !carg.equals("<...>");
-                        boolean isMultiWordOptional = carg.startsWith("[") && carg.endsWith("...]") && !carg.equals("[...]");
-                        if (!(isRequired || isOptional || isMultiWordRequired || isMultiWordOptional)) {
+
+                    int requiredIndex = 0;
+                    int userArgIndex = 0;
+
+                    while (requiredIndex < commandArgs.length) {
+                        String carg = commandArgs[requiredIndex];
+
+                        boolean isRequired = carg.startsWith("<") && carg.endsWith(">");
+                        boolean isOptional = carg.startsWith("[") && carg.endsWith("]");
+                        boolean isMultiple = carg.endsWith("...>") || carg.endsWith("...]");
+
+                        if (isRequired) {
+                            if (isMultiple) {
+                                // <arg...> → обязательно хотя бы один аргумент, можно больше
+                                if (userArgIndex >= args.length) {
+                                    allValid = false;
+                                    break;
+                                }
+                                // всё остальное — часть мультиарга, можно завершить
+                                break;
+                            } else {
+                                // <arg> → один обязательный арг
+                                if (userArgIndex >= args.length) {
+                                    allValid = false;
+                                    break;
+                                }
+                                userArgIndex++;
+                            }
+                        } else if (isOptional) {
+                            if (isMultiple) {
+                                // [arg...] → необязательный мульти арг, можно игнорировать
+                                break;
+                            } else {
+                                // [arg] → один необязательный арг, если есть — берём
+                                if (userArgIndex < args.length) {
+                                    userArgIndex++;
+                                }
+                                // если нет — пропускаем
+                            }
+                        }
+
+                        requiredIndex++;
+                    }
+
+                    // Если пользователь ввел больше аргументов, чем возможно
+                    if (userArgIndex < args.length) {
+                        // если последний был мультиарг — норм
+                        String lastArg = commandArgs[commandArgs.length - 1];
+                        boolean lastIsMultiple = lastArg.endsWith("...>") || lastArg.endsWith("...]");
+                        if (!lastIsMultiple) {
                             allValid = false;
-                            break;
                         }
                     }
+
                     if (!allValid) {
                         sendReply(event.getMessage(), "Invalid args!");
                         return;
