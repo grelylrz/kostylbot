@@ -58,6 +58,10 @@ public class Spec {
             sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nВладелец бота: "+ owner.getUsername());
         }).setAliases("stats");
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
+            if(args.length!=1) {
+                sendReply(e.getMessage(), "Должен быть ровно 1 арг.");
+                return;
+            }
             Snowflake id;
             try {
                 id=Snowflake.of(Long.parseLong(args[0]));
