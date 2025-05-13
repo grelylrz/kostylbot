@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendMessage;
+import static icu.grely.bot.SendUtils.sendReply;
 
 public class CommandsHandler {
     public static Seq<BotCommand> commands = new Seq<>();
@@ -65,9 +66,33 @@ public class CommandsHandler {
             BotCommand command = commands.find(c->{
                 return c.getName().equals(args[0]) && c.isActive();
             });
+            if(command == null) {
+                command = commands.find(c->{
+                    return c.getAliases().find(a->a.equals(args[0])) != null;
+                });
+            }
             if(command != null) {
                 handledCommands+=1;
                 // Arrays.copyOfRange(args, 1, args.length)
+                if (!command.getAliases().isEmpty()) {
+                    String[] commandArgs = command.getArgsN().split(" ");
+                    boolean allValid = true;
+                    for (String carg : commandArgs) {
+                        boolean isRequired = carg.startsWith("<") && carg.endsWith(">") && !carg.equals("<>");
+                        boolean isOptional = carg.startsWith("[") && carg.endsWith("]") && !carg.equals("[]");
+                        boolean isMultiWordRequired = carg.startsWith("<") && carg.endsWith("...>") && !carg.equals("<...>");
+                        boolean isMultiWordOptional = carg.startsWith("[") && carg.endsWith("...]") && !carg.equals("[...]");
+                        if (!(isRequired || isOptional || isMultiWordRequired || isMultiWordOptional)) {
+                            allValid = false;
+                            break;
+                        }
+                    }
+                    if (!allValid) {
+                        sendReply(event.getMessage(), "Invalid args!");
+                        return;
+                    }
+                }
+
                 if(command.getMemberID() == 0) {
                     command.exec(event, Arrays.copyOfRange(args, 1, args.length));
                 } else {

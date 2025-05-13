@@ -6,11 +6,14 @@ import discord4j.core.GatewayDiscordClient;
 import icu.grely.annotatins.SaveSetting;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.util.Random;
+
 public class Vars {
     // main
     public static boolean debug;
     // spec.
     public static final Dotenv dotenv = Dotenv.load();
+    public static final Random random = new Random();
     // db
     public static String DB_USER = dotenv.get("DB_USER");
     public static String DB_PASSWORD = dotenv.get("DB_PASSWORD");
