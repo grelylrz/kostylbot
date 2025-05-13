@@ -66,10 +66,8 @@ public class Spec {
                 id=Snowflake.of(Long.parseLong(getIdByPing(args[0])));
                 gateway.getUserById(id).flatMap(u->{
                     sendEmbedReply(EmbedCreateSpec.builder().image(u.getAvatarUrl()).color(u.getAccentColor().isPresent() ? Color.GREEN : u.getAccentColor().get()).build(), e.getMessage());
-                    return Mono.just(true);
-                }).switchIfEmpty(Mono.fromRunnable(() ->
-                        sendReply(e.getMessage(), "Неизвестный пользователь.")
-                )).subscribe();
+                    return Mono.empty();
+                }).subscribe();
             } catch (Exception er) {
                 sendReply(e.getMessage(), "Неизвестный пользователь.");
             }
