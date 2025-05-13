@@ -1,8 +1,7 @@
 package icu.grely.bot.commands;
 
 import static icu.grely.Vars.*;
-import static icu.grely.bot.SendUtils.sendEmbedReply;
-import static icu.grely.bot.SendUtils.sendReply;
+import static icu.grely.bot.SendUtils.*;
 import static icu.grely.bot.commands.CommandsHandler.commands;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
 
@@ -64,7 +63,7 @@ public class Spec {
             }
             Snowflake id;
             try {
-                id=Snowflake.of(Long.parseLong(args[0]));
+                id=Snowflake.of(Long.parseLong(getIdByPing(args[0])));
                 gateway.getUserById(id).flatMap(u->{
                     sendEmbedReply(EmbedCreateSpec.builder().image(u.getAvatarUrl()).color(u.getAccentColor().isPresent() ? Color.GRAY : u.getAccentColor().get()).build(), e.getMessage());
                     return Mono.empty();

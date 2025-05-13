@@ -91,4 +91,7 @@ public class SendUtils {
                     return Mono.empty();
                 }).doOnError(Log::err).subscribe();
     }
+    public static String getIdByPing(String ping) {
+        return ping.replace("@", "").replace("<", "").replace(">", "").trim();
+    }
 }
