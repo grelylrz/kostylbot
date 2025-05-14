@@ -23,7 +23,7 @@ public class RankCommands {
                 sendReply(ev.getMessage(), "Level: "+us.getLevel()+"\nEXP: "+us.getExp());
             } else {
                 try {
-                    User du = gateway.getUserById(Snowflake.of(args[0])).block();
+                    User du = gateway.getUserById(Snowflake.of(Long.parseLong(getIdByPing(args[0])))).block();
                     if(du==null) {
                         sendReply(ev.getMessage(), "Юзер не найден! Проверьте пинг.");
                         return;
