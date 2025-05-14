@@ -85,10 +85,21 @@ public class Spec {
             ev.getGuild().flatMap(g->{
                 // sendEmbedReply(EmbedCreateSpec.builder().addField(g.getName(), "Участников: "+g.getMemberCount()+"\nВладелец: <@"+g.getOwnerId()+">\nМожно выкинуть с сервера: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d\nКаналов: "+g.getChannels().count()+"\nБанов: "+g.getBans().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0), false).footer("", g.getIconUrl(Image.Format.PNG).orElse("")).color(Color.CYAN).build(), ev.getMessage());
                 EmbedCreateSpec.Builder b = EmbedCreateSpec.builder().color(Color.CYAN);
-                b.addField("Участники", "Всего: "+g.getMemberCount()+"/"+g.getMaxMembers()+"\nМожно выкинуть: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d", true);
-                b.addField("Специальное", "Каналов: "+g.getChannels().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0)+"\nУровень фильтрации: "+g.getContentFilterLevel().name(), true);
-                b.addField("Подробно", "Уровень mfa: "+g.getMfaLevel().name()+"\nУровень nsfw: "+g.getNsfwLevel().name()+"\nУровень верификации: "+g.getVerificationLevel().name(), true);
-                b.addField("Владелец", "<@"+g.getOwnerId()+">", true);
+                b.title(g.getName());
+                b.addField("Участники (общее)", "Всего: " + g.getMemberCount() + "/" + g.getMaxMembers(), true);
+                b.addField("Участники (прунинг)", "Можно выкинуть: " + g.getPruneCount(7) + " (7d) / " + g.getPruneCount(30) + " (30d)", true);
+
+                b.addField("Специальное",
+                        "Каналов: " + g.getChannels().count() + "\n" +
+                                "Бустов: " + g.getPremiumSubscriptionCount().orElse(0) + "\n" +
+                                "Фильтрация: " + g.getContentFilterLevel().name(), true);
+
+                b.addField("Подробно",
+                        "MFA: " + g.getMfaLevel().name() + "\n" +
+                                "NSFW: " + g.getNsfwLevel().name() + "\n" +
+                                "Верификация: " + g.getVerificationLevel().name(), true);
+
+                b.addField("Владелец", "<@" + g.getOwnerId() + ">", true);
                 sendEmbedReply(b.build(), ev.getMessage());
                 return Mono.empty();
             }).subscribe();
