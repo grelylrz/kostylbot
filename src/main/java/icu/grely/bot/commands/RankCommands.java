@@ -5,6 +5,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import icu.grely.ranks.UserSave;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,11 @@ public class RankCommands {
             List<UserSave> lb = getLeaderboard();
             StringBuilder sb = new StringBuilder();
             for(UserSave us : lb) {
-                sb.append(gateway.getUserById(Snowflake.of(us.getId())).block().getUsername()+" "+us.getExp()+" exp "+us.getLevel()+ " lvl\n");
+                //sb.append(gateway.getUserById(Snowflake.of(us.getId())).block().getUsername()+" "+us.getExp()+" exp "+us.getLevel()+ " lvl\n");
+                gateway.getUserById(Snowflake.of(us.getId())).flatMap(user->{
+                    sb.append(user.getUsername()+" "+us.getExp()+" exp "+us.getLevel()+ " lvl\n");
+                    return Mono.empty();
+                }).subscribe();
             }
             sb.setLength(1024);
             sendEmbed(e.getMessage().getChannelId(), EmbedCreateSpec.builder().color(Color.ORANGE).addField("Список лидеров", sb.toString(), true).build());
