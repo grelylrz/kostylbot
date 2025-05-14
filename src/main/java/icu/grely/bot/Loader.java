@@ -20,6 +20,8 @@ import reactor.core.publisher.Mono;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.commands.CommandsHandler.handleEvent;
+import static icu.grely.ranks.UserSave.getUser;
+
 /**Подгрузчик бота.*/
 public class Loader {
     /**Подгрузить бота*/
@@ -56,9 +58,7 @@ public class Loader {
             if(!event.getMessage().getAuthor().isPresent())
                 return Mono.empty();
             User author = event.getMessage().getAuthor().get();
-            UserSave us = cachedUsers.find(u->u.getId().equals(author.getId()));
-            if(us==null)
-                us=new UserSave(author.getId(), 0);
+            UserSave us =getUser(author.getId().asString());
             us.setExp(us.getExp()+expPerMessage);
             handleEvent(event);
             return Mono.empty();
