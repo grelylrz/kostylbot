@@ -89,6 +89,7 @@ public class Spec {
                 b.addField("Специальное", "Каналов: "+g.getChannels().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0)+"\nУровень фильтрации: "+g.getContentFilterLevel().name(), true);
                 b.addField("Подробно", "Уровень mfa: "+g.getMfaLevel().name()+"\nУровень nsfw: "+g.getNsfwLevel().name()+"\nУровень верификации: "+g.getVerificationLevel().name(), true);
                 b.addField("Владелец", "<@"+g.getOwnerId()+">", true);
+                sendEmbedReply(b.build(), ev.getMessage());
                 return Mono.empty();
             }).subscribe();
         }).setAliases("сервер", "serverinfo", "серверинфо");
