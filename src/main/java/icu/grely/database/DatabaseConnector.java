@@ -117,7 +117,7 @@ public class DatabaseConnector {
                         response.setLength(response.length() - 2);
                         response.append("\n},\n");
                     }
-                    sendReply(e.getMessage(), response.toString());
+                    sendReply(e.getMessage(), "```"+response.toString().replace("`", "\\`")+"```");
                 }
             } else {
                 boolean success = DatabaseConnector.executeUpdate(query, pstmt -> {});
