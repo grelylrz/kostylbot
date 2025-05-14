@@ -27,9 +27,6 @@ public class Loader {
             return;
         gateway.updatePresence(ClientPresence.doNotDisturb(ClientActivity.playing(presence))).subscribe();
         Log.info("Gateway connected!");
-        // commands
-        Spec.load();
-        // end commands
         gateway.getApplicationInfo().flatMap(a->{
             Log.info("Running as @", a.getName());
             a.getOwner().flatMap(o->{
@@ -37,7 +34,10 @@ public class Loader {
                 return Mono.empty();
             }).subscribe();
             return Mono.empty();
-        }).subscribe();
+        }).block();
+        // commands
+        Spec.load();
+        // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             event.getMessage().getChannel().flatMap(ch->{
                 if (ch instanceof ThreadChannel threadChannel) {
