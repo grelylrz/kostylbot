@@ -110,7 +110,7 @@ public class DatabaseConnector {
         );
     }
     public static List<UserSave> getLeaderboard() {
-        return executeQueryList("SELECT * FROM users ORDER BY -id LIMIT 10",
+        return executeQueryList("SELECT * FROM users ORDER BY -exp LIMIT 10",
                 stmt->{},
                 UserSave::ResultSetToUserSave
         );
