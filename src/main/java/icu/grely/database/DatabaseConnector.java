@@ -118,7 +118,7 @@ public class DatabaseConnector {
                     }
 
                 } catch (SQLException ex) {
-                    sendReply(e.getMessage(), "Ошибка при выполнении запроса: " + ex.getMessage());
+                    sendReply(e.getMessage(), "Аа щас взорвется бд: " + ex.getMessage());
                 }
             } else {
                 try (Connection conn = dataSource.getConnection();
