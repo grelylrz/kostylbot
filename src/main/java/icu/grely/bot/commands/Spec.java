@@ -10,6 +10,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
+import discord4j.rest.util.Image;
 import icu.grely.bot.SendUtils;
 import reactor.core.publisher.Mono;
 
@@ -80,6 +81,12 @@ public class Spec {
                 sendReply(e.getMessage(), "Неизвестный пользователь.");
             }
         }).setAliases("аватар");
+        registerCommand("server", "Посмотреть информацию о сервере", (ev, args)->{
+            ev.getGuild().flatMap(g->{
+                sendEmbedReply(EmbedCreateSpec.builder().addField(g.getName(), "Участников: "+g.getMemberCount()+"\nВладелец: <@"+g.getOwnerId()+">\nМожно выкинуть с сервера: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d\nКаналов: "+g.getChannels().count()+"\nБанов: "+g.getBans().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0), false).footer("", g.getIconUrl(Image.Format.PNG).orElse("")).color(Color.CYAN).build(), ev.getMessage());
+                return Mono.empty();
+            }).subscribe();
+        }).setAliases("сервер", "serverinfo", "серверинфо");
         Fun.load();
     }
 }
