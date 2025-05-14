@@ -61,7 +61,7 @@ public class CommandsHandler {
         }
         User author = authorOpt.get();
         String content = message.getContent();
-        if(content.toLowerCase().startsWith(Vars.prefix)) {
+        if(content.toLowerCase().startsWith(Vars.prefix.toLowerCase()) || content.toLowerCase().startsWith(prefixAlias.toLowerCase())) {
             String[] args = content.replace(Vars.prefix, "").trim().split(" ");
             BotCommand command = commands.find(c->{
                 return c.getName().equals(args[0]) && c.isActive();

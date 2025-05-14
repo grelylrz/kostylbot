@@ -23,6 +23,7 @@ public class Vars {
     //bot
     public static final String token = dotenv.get("token");
     public static final String prefix = dotenv.get("prefix");
+    public static final String prefixAlias = dotenv.get("prefix_alias");
     public static DiscordClient client;
     public static GatewayDiscordClient gateway;
     @SaveSetting
