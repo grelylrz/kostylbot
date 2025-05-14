@@ -86,33 +86,24 @@ public class Spec {
                 // sendEmbedReply(EmbedCreateSpec.builder().addField(g.getName(), "Участников: "+g.getMemberCount()+"\nВладелец: <@"+g.getOwnerId()+">\nМожно выкинуть с сервера: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d\nКаналов: "+g.getChannels().count()+"\nБанов: "+g.getBans().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0), false).footer("", g.getIconUrl(Image.Format.PNG).orElse("")).color(Color.CYAN).build(), ev.getMessage());
                 EmbedCreateSpec.Builder b = EmbedCreateSpec.builder().color(Color.CYAN);
                 b.title(g.getName());
-                StringBuilder sb = new StringBuilder();
-                sb.setLength(0);
-                sb.append("Всего: ").append(g.getMemberCount()).append("/").append(g.getMaxMembers());
-                if (sb.length() > 1024) sb.setLength(1021);  // safety trim
-                b.addField("Участники (общее)", sb.toString(), true);
-                sb.setLength(0);
-                sb.append("Можно выкинуть: ").append(g.getPruneCount(7)).append(" (7d) / ")
-                        .append(g.getPruneCount(30)).append(" (30d)");
-                if (sb.length() > 1024) sb.setLength(1021);
-                b.addField("Участники (прунинг)", sb.toString(), true);
-                sb.setLength(0);
-                sb.append("Каналов: ").append(g.getChannels().count().block()).append("\n")
-                        .append("Бустов: ").append(g.getPremiumSubscriptionCount().orElse(0)).append("\n")
-                        .append("Фильтрация: ").append(g.getContentFilterLevel().name());
-                if (sb.length() > 1024) sb.setLength(1021);
-                b.addField("Специальное", sb.toString(), true);
-                sb.setLength(0);
-                sb.append("MFA: ").append(g.getMfaLevel().name()).append("\n")
-                        .append("NSFW: ").append(g.getNsfwLevel().name()).append("\n")
-                        .append("Верификация: ").append(g.getVerificationLevel().name());
-                if (sb.length() > 1024) sb.setLength(1021);
-                b.addField("Подробно", sb.toString(), true);
-                sb.setLength(0);
-                sb.append("<@").append(g.getOwnerId()).append(">");
-                if (sb.length() > 1024) sb.setLength(1021);
-                b.addField("Владелец", sb.toString(), true);
+
+                b.addField("Участники",
+                        "Всего: " + g.getMemberCount() + "/" + g.getMaxMembers().getAsInt(), true);
+
+                b.addField("Специальное",
+                        "Каналов: " + g.getChannels().count().block() + "\n" +
+                                "Бустов: " + g.getPremiumSubscriptionCount().orElse(0) + "\n" +
+                                "Фильтрация: " + g.getContentFilterLevel().name(), true);
+
+                b.addField("Подробно",
+                        "MFA: " + g.getMfaLevel().name() + "\n" +
+                                "NSFW: " + g.getNsfwLevel().name() + "\n" +
+                                "Верификация: " + g.getVerificationLevel().name(), true);
+
+                b.addField("Владелец", "<@" + g.getOwnerId().asString() + ">", true);
+
                 sendEmbedReply(b.build(), ev.getMessage());
+
                 return Mono.empty();
             }).subscribe();
         }).setAliases("сервер", "serverinfo", "серверинфо");
