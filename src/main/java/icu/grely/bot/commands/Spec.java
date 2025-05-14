@@ -64,7 +64,7 @@ public class Spec {
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
         registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
-            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count()+"\nВладелец бота: "+ owner.getUsername());
+            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count().block()+"\nВладелец бота: "+ owner.getUsername());
         }).setAliases("stats");
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
             if(args.length!=1) {
