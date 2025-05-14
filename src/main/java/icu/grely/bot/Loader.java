@@ -10,7 +10,10 @@ import discord4j.core.shard.GatewayBootstrap;
 import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
 import icu.grely.bot.commands.CommandsHandler;
+import icu.grely.bot.commands.Fun;
+import icu.grely.bot.commands.RankCommands;
 import icu.grely.bot.commands.Spec;
+import icu.grely.database.DatabaseConnector;
 import reactor.core.publisher.Mono;
 
 import static icu.grely.Vars.*;
@@ -37,6 +40,9 @@ public class Loader {
         }).block();
         // commands
         Spec.load();
+        Fun.load();
+        DatabaseConnector.loadSQLCommands();
+        RankCommands.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             event.getMessage().getChannel().flatMap(ch->{
