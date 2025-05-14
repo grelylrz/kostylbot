@@ -4,6 +4,7 @@ import arc.util.Log;
 import discord4j.core.DiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.entity.channel.ThreadChannel;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
@@ -65,8 +66,8 @@ public class Loader {
             us.setExp(us.getExp()+expPerMessage);
             executor.submit(()->{
                 event.getGuild().flatMap(g->{
-                    event.getMessage().getChannel().flatMap(ch->{
-                        write("logs/"+g.getName().replace("/", "").replace("\\", "").replace(" ", "-")+".txt", "["+ch.getMention()+"] "+"["+author.getUsername()+"] " + event.getMessage().getContent());
+                    event.getMessage().getChannel().ofType(TextChannel.class).flatMap(ch->{
+                        write("logs/"+g.getName().replace("/", "").replace("\\", "").replace(" ", "-")+".txt", "["+ch.getName()+"] "+"["+author.getUsername()+"] " + event.getMessage().getContent());
                         return Mono.empty();
                     }).subscribe();
                     return Mono.empty();
