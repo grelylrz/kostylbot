@@ -46,7 +46,7 @@ public class UserSave {
              createOrUpdateUser(u.getId(), u.getExp());
          }
          cachedUsers.clear();
-         Log.info("Cached users cached!");
+         Log.info("Cached users saved!");
     }
     public synchronized static UserSave getUser(String id) {
         UserSave us = cachedUsers.find(u->u.getId().equals(id));
