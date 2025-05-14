@@ -66,7 +66,7 @@ public class Loader {
             executor.submit(()->{
                 event.getGuild().flatMap(g->{
                     event.getMessage().getChannel().flatMap(ch->{
-                        write("logs/"+g.getName().replace("/", "").replace("\\", "").replace(" ", "-"), "["+ch.getMention()+"] "+"["+author.getUsername()+"] " + event.getMessage().getContent());
+                        write("logs/"+g.getName().replace("/", "").replace("\\", "").replace(" ", "-")+".txt", "["+ch.getMention()+"] "+"["+author.getUsername()+"] " + event.getMessage().getContent());
                         return Mono.empty();
                     }).subscribe();
                     return Mono.empty();
