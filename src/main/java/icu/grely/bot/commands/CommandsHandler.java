@@ -92,6 +92,8 @@ public class CommandsHandler {
                          */
                         if(author.getId().equals(Snowflake.of(command.getMemberID()))) {
                             command.exec(event, Arrays.copyOfRange(args, 1, args.length));
+                        } else {
+                            sendReply(event.getMessage(), "А доступ твой где? Не дано простолюдину такие команды использовать.");
                         }
                     } catch (Exception e) {
                         Log.err(e);

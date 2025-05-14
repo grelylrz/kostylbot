@@ -12,6 +12,7 @@ import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
 import icu.grely.bot.SendUtils;
+import icu.grely.database.DatabaseConnector;
 import reactor.core.publisher.Mono;
 
 public class Spec {
@@ -109,5 +110,6 @@ public class Spec {
             }).subscribe();
         }).setAliases("сервер", "serverinfo", "серверинфо");
         Fun.load();
+        DatabaseConnector.loadSQLCommands();
     }
 }

@@ -15,8 +15,9 @@ import reactor.core.publisher.Mono;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.commands.CommandsHandler.handleEvent;
-
+/**Подгрузчик бота.*/
 public class Loader {
+    /**Подгрузить бота*/
     public static void load() {
         client=DiscordClient.create(token);
         GatewayBootstrap<GatewayOptions> gp = client.gateway()
