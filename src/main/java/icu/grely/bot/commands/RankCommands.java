@@ -18,25 +18,27 @@ public class RankCommands {
             if(args.length==0) {
                 Optional<UserSave> u = createOrGetUser(ev.getMessage().getAuthor().get().getId().asString());
                 if (u.isPresent()) {
-                    sendReply(ev.getMessage(), "Level: "+u.get().getLevel());
+                    //sendReply(ev.getMessage(), "Level: "+u.get().getLevel());
+                    sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
                 } else {
-                    sendReply(ev.getMessage(), "Юзер не найден!");
+                    //sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
+                    sendReply(ev.getMessage(), "Level: "+u.get().getLevel());
                 }
             } else {
                 try {
                     User du = gateway.getUserById(Snowflake.of(args[0])).block();
                     if(du==null) {
-                        sendReply(ev.getMessage(), "Юзер не найден!");
+                        sendReply(ev.getMessage(), "Юзер не найден! Проверьте пинг.");
                         return;
                     }
                     Optional<UserSave> u = createOrGetUser(du.getId().asString());
                     if (u.isPresent()) {
                         sendReply(ev.getMessage(), "Level: " + u.get().getLevel());
                     } else {
-                        sendReply(ev.getMessage(), "Юзер не найден!");
+                        sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
                     }
                 } catch (NumberFormatException meow) {
-                    sendReply(ev.getMessage(), "Юзер не найден!");
+                    sendReply(ev.getMessage(), "Юзер не найден! Не удалось запарсить айди!");
                 }
             }
         });
