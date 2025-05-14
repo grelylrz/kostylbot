@@ -32,7 +32,7 @@ public class Loader {
             a.getOwner().flatMap(o->{
                 owner=o;
                 return Mono.empty();
-            }).subscribe();
+            }).block();
             return Mono.empty();
         }).block();
         // commands
