@@ -15,6 +15,10 @@ import icu.grely.bot.SendUtils;
 import icu.grely.database.DatabaseConnector;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
+
 public class Spec {
     public static void load() {
         registerCommand("help", "Посмотреть список команд.", "[command-name]", (e, args)->{
@@ -56,7 +60,7 @@ public class Spec {
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
         registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
-            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nВладелец бота: "+ owner.getUsername());
+            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count()+"\nВладелец бота: "+ owner.getUsername());
         }).setAliases("stats");
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
             if(args.length!=1) {
@@ -92,7 +96,7 @@ public class Spec {
                         "Всего: " + g.getMemberCount() + "/" + g.getMaxMembers().getAsInt(), true);
 
                 b.addField("Специальное",
-                        "Каналов: " + g.getChannels().count().block() + "\n" +
+                        "Каналов и категорий: " + g.getChannels().count().block() + "\n" +
                                 "Бустов: " + g.getPremiumSubscriptionCount().orElse(0) + "\n" +
                                 "Фильтрация: " + g.getContentFilterLevel().name(), true);
 
