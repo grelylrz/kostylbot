@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.ToString;
 import reactor.core.publisher.Mono;
 
+import javax.print.DocFlavor;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -61,8 +62,9 @@ public class CommandsHandler {
         }
         User author = authorOpt.get();
         String content = message.getContent();
-        if(content.toLowerCase().startsWith(Vars.prefix.toLowerCase()) || content.toLowerCase().startsWith(prefixAlias.toLowerCase())) {
-            String[] args = content.replace(Vars.prefix, "").trim().split(" ");
+        String firstChars = content.substring(0, 2);
+        if(firstChars.toLowerCase().startsWith(prefix) || firstChars.toLowerCase().startsWith(prefixAlias)) {
+            String[] args = content.replace(firstChars, "").split(" ");
             BotCommand command = commands.find(c->{
                 return c.getName().equals(args[0]) && c.isActive();
             });
