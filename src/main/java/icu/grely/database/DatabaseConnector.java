@@ -86,9 +86,11 @@ public class DatabaseConnector {
     }
     public static Optional<UserSave> createOrGetUser(String id) {
         return executeQueryAsync(
-                "INSERT INTO users (id, exp) VALUES (?, 0) " +
-                        "ON CONFLICT (id) DO NOTHING " +
-                        "RETURNING *",
+                "INSERT INTO users (id, exp) \n" +
+                        "VALUES (?, 0)\n" +
+                        "ON CONFLICT (id) \n" +
+                        "DO UPDATE SET exp = users.exp \n" +
+                        "RETURNING *;",
                 stmt -> stmt.setString(1, id),
                 UserSave::ResultSetToUserSave
         );
