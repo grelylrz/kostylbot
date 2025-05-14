@@ -46,10 +46,10 @@ public class RankCommands {
             List<UserSave> lb = getLeaderboard();
             StringBuilder sb = new StringBuilder();
             for(UserSave us : lb) {
-                sb.append(gateway.getUserById(Snowflake.of(us.getId())).block().getUsername()+" "+us.getExp()+" exp "+us.getLevel()+" "+us.getExp()+" lvl\n");
+                sb.append(gateway.getUserById(Snowflake.of(us.getId())).block().getUsername()+" "+us.getExp()+" exp "+us.getLevel()+ " lvl\n");
             }
             sb.setLength(1024);
-            sendEmbed(e.getMessage().getChannelId(), EmbedCreateSpec.builder().addField("Список лидеров", sb.toString(), true).build());
+            sendEmbed(e.getMessage().getChannelId(), EmbedCreateSpec.builder().color(Color.ORANGE).addField("Список лидеров", sb.toString(), true).build());
         });
     }
 }
