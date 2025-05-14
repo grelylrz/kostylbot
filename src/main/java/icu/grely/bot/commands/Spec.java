@@ -90,7 +90,7 @@ public class Spec {
                 b.addField("Участники (прунинг)", "Можно выкинуть: " + g.getPruneCount(7) + " (7d) / " + g.getPruneCount(30) + " (30d)", true);
 
                 b.addField("Специальное",
-                        "Каналов: " + g.getChannels().count() + "\n" +
+                        "Каналов: " + g.getChannels().count().block() + "\n" +
                                 "Бустов: " + g.getPremiumSubscriptionCount().orElse(0) + "\n" +
                                 "Фильтрация: " + g.getContentFilterLevel().name(), true);
 
