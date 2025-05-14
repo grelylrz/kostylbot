@@ -37,7 +37,7 @@ public class Fun {
             }
 
             sb.setLength(255);
-            sendEmbedReply(EmbedCreateSpec.builder().title(sb.toString()).addField("", reply, false).color(color).build(), e.getMessage());
+            sendEmbedReply(EmbedCreateSpec.builder().addField(sb.toString(), reply, true).color(color).build(), e.getMessage());
             sb.setLength(0);
         }).setAliases(Seq.with("balls", "8ball", "шары", "шар"));
         registerCommand("coinflip", "Подбросить монетку.", "<question...>", (event, args)->{
