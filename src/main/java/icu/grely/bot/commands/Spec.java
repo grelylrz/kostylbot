@@ -84,7 +84,7 @@ public class Spec {
         registerCommand("server", "Посмотреть информацию о сервере", (ev, args)->{
             ev.getGuild().flatMap(g->{
                 // sendEmbedReply(EmbedCreateSpec.builder().addField(g.getName(), "Участников: "+g.getMemberCount()+"\nВладелец: <@"+g.getOwnerId()+">\nМожно выкинуть с сервера: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d\nКаналов: "+g.getChannels().count()+"\nБанов: "+g.getBans().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0), false).footer("", g.getIconUrl(Image.Format.PNG).orElse("")).color(Color.CYAN).build(), ev.getMessage());
-                EmbedCreateSpec.Builder b = EmbedCreateSpec.builder().color(Color.CYAN);
+                EmbedCreateSpec.Builder b = EmbedCreateSpec.builder().color(Color.LIGHT_SEA_GREEN);
                 b.title(g.getName());
 
                 b.addField("Участники",
