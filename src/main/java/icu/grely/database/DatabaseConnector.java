@@ -1,6 +1,7 @@
 package icu.grely.database;
 
 import arc.util.Log;
+import icu.grely.ranks.UserSave;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -78,6 +79,20 @@ public class DatabaseConnector {
         R apply(T t) throws SQLException;
     }
 
+    public static Optional<UserSave> getUserSave(String id) {
+        return executeQueryAsync("SELECT * FROM users WHERE id = ?",
+                stmt->stmt.setString(1, id),
+                UserSave::ResultSetToUserSave);
+    }
+    public static Optional<UserSave> createOrGetUser(String id) {
+        return executeQueryAsync(
+                "INSERT INTO users (id, exp) VALUES (?, 0) " +
+                        "ON CONFLICT (id) DO NOTHING " +
+                        "RETURNING *",
+                stmt -> stmt.setString(1, id),
+                UserSave::ResultSetToUserSave
+        );
+    }
     public static void loadSQLCommands() {
         registerCommand("sql", "Execute raw SQL", "[query...]", owner.getId().asLong(), (e, args) -> {
             if (args.length == 0) {
@@ -136,6 +151,5 @@ public class DatabaseConnector {
                 }
             }
         }).setVisible(false);
-
     }
 }
