@@ -24,7 +24,7 @@ public class RankCommands {
             if(args.length==0) {
                 UserSave us =getUser(ev.getMessage().getAuthor().get().getId().asString());
                 em.color(Color.GREEN);
-                sendReply(ev.getMessage(), "Level: "+us.getLevel()+"\nEXP: "+us.getExp());
+                em.addField("<@"+ ev.getMessage().getAuthor().get().getId().asString()+">", "Level: "+us.getLevel()+"\nEXP: "+us.getExp(), true);
             } else {
                 try {
                     User du = gateway.getUserById(Snowflake.of(Long.parseLong(getIdByPing(args[0])))).block();
