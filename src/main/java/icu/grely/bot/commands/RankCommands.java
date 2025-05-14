@@ -19,7 +19,8 @@ public class RankCommands {
     public static void load() {
         registerCommand("rank", "Посмотреть лвл/ранг, возвращает ваш ранг если вы не пинганули пользователя.", "[user-ping]", (ev, args)->{
             if(args.length==0) {
-                sendReply(ev.getMessage(), "Level: "+getUser(ev.getMessage().getAuthor().get().getId().asString()).getLevel());
+                UserSave us =getUser(ev.getMessage().getAuthor().get().getId().asString());
+                sendReply(ev.getMessage(), "Level: "+us.getLevel()+"\nEXP: "+us.getExp());
             } else {
                 try {
                     User du = gateway.getUserById(Snowflake.of(args[0])).block();
@@ -27,7 +28,8 @@ public class RankCommands {
                         sendReply(ev.getMessage(), "Юзер не найден! Проверьте пинг.");
                         return;
                     }
-                    sendReply(ev.getMessage(), "Level: "+getUser(du.getId().asString()).getLevel());
+                    UserSave us = getUser(du.getId().asString());
+                    sendReply(ev.getMessage(), "Level: "+us.getLevel()+"\nEXP: "+us.getExp());
                 } catch (NumberFormatException meow) {
                     sendReply(ev.getMessage(), "Юзер не найден! Не удалось запарсить айди!");
                 }
