@@ -5,13 +5,8 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.*;
+import java.util.*;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendReply;
@@ -84,39 +79,55 @@ public class DatabaseConnector {
     }
 
     public static void loadSQLCommands() {
-        registerCommand("sql", "Execute raw SQL", "[query...]", owner.getId().asLong(), (e, args) -> {
+        registerCommand("sql", "Execute raw SQL", "[query...]", 1/*owner.getId().asLong()*/, (e, args) -> {
             if (args.length == 0) {
                 sendReply(e.getMessage(), "А че мне в бд посылать то?");
                 return;
             }
             String query = String.join(" ", args);
             if (query.trim().toLowerCase().startsWith("select")) {
-                List<String> results = DatabaseConnector.executeQueryList(
+                List<Map<String, String>> results = DatabaseConnector.executeQueryList(
                         query,
                         pstmt -> {},
                         rs -> {
                             try {
-                                return rs.getString(1);
+                                Map<String, String> row = new HashMap<>();
+                                ResultSetMetaData metaData = rs.getMetaData();
+                                int columnCount = metaData.getColumnCount();
+                                for (int i = 1; i <= columnCount; i++) {
+                                    row.put(metaData.getColumnName(i), rs.getString(i));
+                                }
+                                return row;
                             } catch (SQLException ex) {
                                 Log.err("Error fetching result", ex);
-                                return "";
+                                return new HashMap<>();
                             }
                         }
                 );
 
                 if (results.isEmpty()) {
-                    sendReply(e.getMessage(), "No results found.");
+                    sendReply(e.getMessage(), "БД ничего не сказала...");
                 } else {
-                    sendReply(e.getMessage(), "Query Results:\n" + String.join("\n", results));
+                    StringBuilder response = new StringBuilder();
+                    for (Map<String, String> row : results) {
+                        response.append("{\n");
+                        for (Map.Entry<String, String> entry : row.entrySet()) {
+                            response.append("  \"").append(entry.getKey()).append("\": \"").append(entry.getValue()).append("\",\n");
+                        }
+                        response.setLength(response.length() - 2);
+                        response.append("\n},\n");
+                    }
+                    sendReply(e.getMessage(), response.toString());
                 }
             } else {
                 boolean success = DatabaseConnector.executeUpdate(query, pstmt -> {});
                 if (success) {
-                    sendReply(e.getMessage(), "БД ничего не сказала.");
+                    sendReply(e.getMessage(), "БД ничего не сказала...");
                 } else {
                     sendReply(e.getMessage(), "БД тарахтит, ты что то не так сделал, сейчас взорвется еще!");
                 }
             }
+
         }).setVisible(false);
     }
 }
