@@ -101,6 +101,7 @@ public class Spec {
                                 "Верификация: " + g.getVerificationLevel().name(), true);
 
                 b.addField("Владелец", "<@" + g.getOwnerId().asString() + ">", true);
+                b.addField("Создан в", "<t:"+g.getId().getTimestamp().getEpochSecond()+">", true);
 
                 sendEmbedReply(b.build(), ev.getMessage());
 
