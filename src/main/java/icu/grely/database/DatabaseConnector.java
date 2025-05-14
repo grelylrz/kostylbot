@@ -117,6 +117,6 @@ public class DatabaseConnector {
                     sendReply(e.getMessage(), "БД тарахтит, ты что то не так сделал, сейчас взорвется еще!");
                 }
             }
-        });
+        }).setVisible(false);
     }
 }
