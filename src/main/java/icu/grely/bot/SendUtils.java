@@ -83,6 +83,12 @@ public class SendUtils {
             return;
         sendMessage(msg.getChannelId(), MessageCreateSpec.builder().messageReference(MessageReferenceData.builder().channelId(msg.getChannelId().asLong()).messageId(msg.getId().asLong()).build()).content(content).build());
     }
+    public static void sendReply(Message msg, StringBuilder content) {
+        if(content.isEmpty())
+            return;
+        content.setLength(1999);
+        sendMessage(msg.getChannelId(), MessageCreateSpec.builder().messageReference(MessageReferenceData.builder().channelId(msg.getChannelId().asLong()).messageId(msg.getId().asLong()).build()).content(content.toString()).build());
+    }
     /*Ответ с эмбедом*/
     public static void sendEmbedReply(EmbedCreateSpec e, Message msg) {
         msg.getChannel()
