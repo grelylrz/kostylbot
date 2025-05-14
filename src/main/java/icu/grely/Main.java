@@ -24,13 +24,13 @@ public class Main {
         loadSettings();
         loadApp();
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
-            Log.info("Saving settings, please, wait.");
+            Log.info("Saving, please, wait.");
             saveSettings();
             saveUsers();
             Core.settings.forceSave();
         }));
         Timer.schedule(()->{
-            // Сохраняю юзеров в бд чтобы почистить память.
+            // Сохраняю юзеров в бд, чтобы почистить память.
             saveUsers();
         }, 0, 10*60);
         Loader.load();
