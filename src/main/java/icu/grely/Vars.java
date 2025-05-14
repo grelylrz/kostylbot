@@ -32,6 +32,7 @@ public class Vars {
     public static User owner=null;
     //ranks
     public static double expScale=12.5;
+    public static long expPerMessage=2;
     public static Seq<UserSave> cachedUsers = new Seq<>();
     //commands
     public static Seq<String> yesDialogs = Seq.with("✅ Уверен в этом!", "\uD83D\uDC4D Отличная идея!", "\uD83D\uDC4C Звучит хорошо.");

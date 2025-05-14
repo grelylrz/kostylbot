@@ -95,6 +95,20 @@ public class DatabaseConnector {
                 UserSave::ResultSetToUserSave
         );
     }
+    public synchronized static Optional<UserSave> createOrUpdateUser(String id, long exp) {
+        return executeQueryAsync(
+                "INSERT INTO users (id, exp) \n" +
+                        "VALUES (?, ?) \n" +
+                        "ON CONFLICT (id) \n" +
+                        "DO UPDATE SET exp = EXCLUDED.exp \n" +
+                        "RETURNING *;",
+                stmt -> {
+                    stmt.setString(1, id);
+                    stmt.setLong(2, exp);
+                },
+                UserSave::ResultSetToUserSave
+        );
+    }
     public static void loadSQLCommands() {
         registerCommand("sql", "Execute raw SQL", "[query...]", owner.getId().asLong(), (e, args) -> {
             if (args.length == 0) {

@@ -7,12 +7,14 @@ import arc.Settings;
 import arc.mock.MockFiles;
 import arc.struct.Seq;
 import arc.util.Log;
+import arc.util.Timer;
 import icu.grely.bot.Loader;
 import icu.grely.logger.LoggerProvider;
 import reactor.util.Loggers;
 
 import static icu.grely.SettingsLoader.saveSettings;
 import static icu.grely.logger.BLogger.loadLogger;
+import static icu.grely.ranks.UserSave.saveUsers;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,8 +26,13 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(()->{
             Log.info("Saving settings, please, wait.");
             saveSettings();
+            saveUsers();
             Core.settings.forceSave();
         }));
+        Timer.schedule(()->{
+            // Сохраняю юзеров в бд чтобы почистить память.
+            saveUsers();
+        }, 0, 10*60);
         Loader.load();
     }
 

@@ -3,6 +3,7 @@ package icu.grely.bot;
 import arc.util.Log;
 import discord4j.core.DiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.ThreadChannel;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
@@ -14,6 +15,7 @@ import icu.grely.bot.commands.Fun;
 import icu.grely.bot.commands.RankCommands;
 import icu.grely.bot.commands.Spec;
 import icu.grely.database.DatabaseConnector;
+import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
 
 import static icu.grely.Vars.*;
@@ -51,6 +53,13 @@ public class Loader {
                 }
                 return Mono.empty();
             }).subscribe();
+            if(!event.getMessage().getAuthor().isPresent())
+                return Mono.empty();
+            User author = event.getMessage().getAuthor().get();
+            UserSave us = cachedUsers.find(u->u.getId().equals(author.getId()));
+            if(us==null)
+                us=new UserSave(author.getId(), 0);
+            us.setExp(us.getExp()+expPerMessage);
             handleEvent(event);
             return Mono.empty();
         }).subscribe();
