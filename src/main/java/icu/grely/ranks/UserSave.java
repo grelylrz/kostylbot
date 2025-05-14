@@ -1,5 +1,6 @@
 package icu.grely.ranks;
 
+import arc.util.Log;
 import discord4j.common.util.Snowflake;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,10 +41,12 @@ public class UserSave {
          );
     }
     public synchronized static void saveUsers() {
+         Log.info("Saving cached users to db!");
          for(UserSave u : cachedUsers) {
              createOrUpdateUser(u.getId(), u.getExp());
          }
          cachedUsers.clear();
+         Log.info("Cached users cached!");
     }
     public synchronized static UserSave getUser(String id) {
         UserSave us = cachedUsers.find(u->u.getId().equals(id));
