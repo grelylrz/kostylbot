@@ -29,6 +29,8 @@ public class Vars {
     @SaveSetting
     public static String presence="Hello, im kostylbot.";
     public static User owner=null;
+    //ranks
+    public static double expScale=12.5;
     //commands
     public static Seq<String> yesDialogs = Seq.with("✅ Уверен в этом!", "\uD83D\uDC4D Отличная идея!", "\uD83D\uDC4C Звучит хорошо.");
     public static Seq<String> noDialogs = Seq.with("❌ Плохая идея", "\uD83D\uDE35 Даже не думай об этом!", "\uD83D\uDC4E Не думаю, что это кончится хорошо.");
