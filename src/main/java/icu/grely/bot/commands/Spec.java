@@ -109,7 +109,5 @@ public class Spec {
                 return Mono.empty();
             }).subscribe();
         }).setAliases("сервер", "serverinfo", "серверинфо");
-        Fun.load();
-        DatabaseConnector.loadSQLCommands();
     }
 }
