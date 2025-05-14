@@ -95,7 +95,7 @@ public class DatabaseConnector {
                 UserSave::ResultSetToUserSave
         );
     }
-    public synchronized static Optional<UserSave> createOrUpdateUser(String id, long exp) {
+    public static Optional<UserSave> createOrUpdateUser(String id, long exp) {
         return executeQueryAsync(
                 "INSERT INTO users (id, exp) \n" +
                         "VALUES (?, ?) \n" +
@@ -106,6 +106,12 @@ public class DatabaseConnector {
                     stmt.setString(1, id);
                     stmt.setLong(2, exp);
                 },
+                UserSave::ResultSetToUserSave
+        );
+    }
+    public static List<UserSave> getLeaderboard() {
+        return executeQueryList("SELECT * FROM users ORDER BY -id LIMIT 10",
+                stmt->{},
                 UserSave::ResultSetToUserSave
         );
     }
