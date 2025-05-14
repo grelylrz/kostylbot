@@ -18,11 +18,9 @@ public class RankCommands {
             if(args.length==0) {
                 Optional<UserSave> u = createOrGetUser(ev.getMessage().getAuthor().get().getId().asString());
                 if (u.isPresent()) {
-                    //sendReply(ev.getMessage(), "Level: "+u.get().getLevel());
-                    sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
-                } else {
-                    //sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
                     sendReply(ev.getMessage(), "Level: "+u.get().getLevel());
+                } else {
+                    sendReply(ev.getMessage(), "Юзер не найден! Сохранение не найдено!");
                 }
             } else {
                 try {
