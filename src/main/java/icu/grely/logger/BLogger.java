@@ -2,6 +2,10 @@ package icu.grely.logger;
 
 import arc.util.Log;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static icu.grely.Vars.*;
 
 public class BLogger {
@@ -23,6 +27,20 @@ public class BLogger {
         };
 
         loadedLogger = true;
+    }
+    public static void write(String path, String content) {
+        File file = new File(path);
+        File parent = file.getParentFile();
+
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(content);
+        } catch (IOException e) {
+            Log.err(e);
+        }
     }
     /**Дебаг сообщение видное только при включенном дебаге.*/
     public static void debug(Object o) {

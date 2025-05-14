@@ -9,6 +9,8 @@ import icu.grely.ranks.UserSave;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Vars {
     // main
@@ -16,6 +18,7 @@ public class Vars {
     // spec.
     public static final Dotenv dotenv = Dotenv.load();
     public static final Random random = new Random();
+    public static final ExecutorService executor = Executors.newFixedThreadPool(1);
     // db
     public static String DB_USER = dotenv.get("DB_USER");
     public static String DB_PASSWORD = dotenv.get("DB_PASSWORD");
