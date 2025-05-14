@@ -32,7 +32,7 @@ public class Vars {
     public static String presence="Hello, im kostylbot.";
     public static User owner=null;
     //ranks
-    public static double expScale=12.5;
+    public static double expScale=18.2;
     public static long expPerMessage=2;
     public static Seq<UserSave> cachedUsers = new Seq<>();
     //commands

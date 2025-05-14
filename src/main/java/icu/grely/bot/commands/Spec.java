@@ -46,6 +46,10 @@ public class Spec {
                     sendReply(e.getMessage(), "Command not found.");
                     return;
                 }
+                if (!c.isVisible() || !c.isActive()) {
+                    sendReply(e.getMessage(), "Command not found.");
+                    return;
+                }
                 em.title("Подробная информация о команде.");
                 StringBuilder cname = new StringBuilder();
                 cname.append(c.name);

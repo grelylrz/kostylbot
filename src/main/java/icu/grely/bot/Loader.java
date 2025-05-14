@@ -49,15 +49,17 @@ public class Loader {
         RankCommands.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
+            if(!event.getMessage().getAuthor().isPresent())
+                return Mono.empty();
+            User author = event.getMessage().getAuthor().get();
+            if(author.isBot())
+                return Mono.empty();
             event.getMessage().getChannel().flatMap(ch->{
                 if (ch instanceof ThreadChannel threadChannel) {
                     threadChannel.join().subscribe();
                 }
                 return Mono.empty();
             }).subscribe();
-            if(!event.getMessage().getAuthor().isPresent())
-                return Mono.empty();
-            User author = event.getMessage().getAuthor().get();
             UserSave us =getUser(author.getId().asString());
             us.setExp(us.getExp()+expPerMessage);
             handleEvent(event);

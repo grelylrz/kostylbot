@@ -116,7 +116,7 @@ public class DatabaseConnector {
         );
     }
     public static void loadSQLCommands() {
-        registerCommand("sql", "Execute raw SQL", "[query...]", owner.getId().asLong(), (e, args) -> {
+        registerCommand("sql", "Execute raw SQL", "<query...>", owner.getId().asLong(), (e, args) -> {
             if (args.length == 0) {
                 sendReply(e.getMessage(), "А че мне в бд посылать то?");
                 return;
