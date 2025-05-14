@@ -55,6 +55,6 @@ public class RankCommands {
             }
             sb.setLength(1024);
             sendEmbed(e.getMessage().getChannelId(), EmbedCreateSpec.builder().color(Color.ORANGE).addField("Список лидеров", sb.toString(), true).build());
-        });
+        }).setAliases("lb", "лидеры");
     }
 }
