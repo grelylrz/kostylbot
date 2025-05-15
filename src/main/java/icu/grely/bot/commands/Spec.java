@@ -10,6 +10,8 @@ import arc.struct.Seq;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
 import discord4j.core.object.entity.User;
+import discord4j.core.object.presence.ClientActivity;
+import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
@@ -151,5 +153,9 @@ public class Spec {
             em.footer("Подсказка: Юзеры имеют social credit score, данное значение является между-серверным, оно снимается за баны/мьюты/варны, также в скором будующем смогут повышать. Некоторые владельцы серверов могут опираться на него.", "");
             sendEmbedReply(em.build(), e.getMessage());
         }).setAliases("юзер");
+        registerCommand("presence", "Set presence", "<query...>", owner.getId().asLong(), (e, args) -> {
+            presence=String.join(" ", args);
+            gateway.updatePresence(ClientPresence.doNotDisturb(ClientActivity.playing(presence))).subscribe();
+        });
     }
 }
