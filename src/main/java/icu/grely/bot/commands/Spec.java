@@ -4,15 +4,18 @@ import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.*;
 import static icu.grely.bot.commands.CommandsHandler.commands;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.ranks.UserSave.getUser;
 
 import arc.struct.Seq;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
+import discord4j.core.object.entity.User;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
 import icu.grely.bot.SendUtils;
 import icu.grely.database.DatabaseConnector;
+import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -117,5 +120,34 @@ public class Spec {
                 return Mono.empty();
             }).subscribe();
         }).setAliases("сервер", "serverinfo", "серверинфо");
+        registerCommand("user", "Посмотреть информацию о юзере", "[ping]", (e, args)->{
+            EmbedCreateSpec.Builder em=EmbedCreateSpec.builder();
+            if(args.length==0) {
+                UserSave us =getUser(e.getMessage().getAuthor().get().getId().asString());
+                User author = e.getMessage().getAuthor().get();
+                em.color(Color.GREEN);
+                em.addField("<@"+ e.getMessage().getAuthor().get().getId().asString()+">", "Создан: <t:"+author.getId().getTimestamp().getEpochSecond()+">", true);
+                em.addField("Юзер в базе бота", "Level: "+us.getLevel()+"\nEXP: "+us.getExp()+"Social credit score: "+us.getSocialCredit(), true);
+            } else {
+                try {
+                    User du = gateway.getUserById(Snowflake.of(Long.parseLong(getIdByPing(args[0])))).block();
+                    if(du==null) {
+                        em.color(Color.RED);
+                        em.addField("Failed", "Юзер не найден в дискорде.", true);
+                    } else {
+                        UserSave us = getUser(du.getId().asString());
+                        em.color(Color.GREEN);
+                        //em.addField("<@"+du.getId().asString()+">", "Level: "+us.getLevel()+"\nEXP: "+us.getExp(), true);
+                        em.addField("<@"+ e.getMessage().getAuthor().get().getId().asString()+">", "Создан: <t:"+du.getId().getTimestamp().getEpochSecond()+">\nАйди: "+du.getId().asString(), true);
+                        em.addField("Юзер в базе бота", "Level: "+us.getLevel()+"\nEXP: "+us.getExp()+"Social credit score: "+us.getSocialCredit(), true);
+                    }
+                } catch (NumberFormatException meow) {
+                    em.color(Color.RED);
+                    em.addField("Failed", "Не удалось запарсить дискорд айди.", true);
+                }
+            }
+            em.footer("Подсказка: Юзеры имеют social credit score, данное значение является между-серверным, оно снимается за баны/мьюты/варны, некоторые владельцы серверов могут опираться на него.", "");
+            sendEmbedReply(em.build(), e.getMessage());
+        }).setAliases("юзер");
     }
 }
