@@ -48,6 +48,7 @@ public class Loader {
         DatabaseConnector.loadSQLCommands();
         RankCommands.load();
         Moderation.load();
+        NSFW.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             if(!event.getMessage().getAuthor().isPresent())

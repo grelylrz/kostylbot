@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    kotlin("jvm")
 }
 
 group = "grely"
@@ -18,13 +19,15 @@ dependencies {
     implementation(files("postgresql-42.7.5.jar"))
     implementation("org.reflections:reflections:0.10.2")
     implementation("io.github.cdimascio:dotenv-java:3.2.0")
-
+    implementation("org.jsoup:jsoup:1.20.1")
+    
     compileOnly("org.projectlombok:lombok:1.18.38")
 
     annotationProcessor("org.projectlombok:lombok:1.18.38")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
@@ -39,4 +42,7 @@ tasks.jar {
         )
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+kotlin {
+    jvmToolchain(17)
 }
