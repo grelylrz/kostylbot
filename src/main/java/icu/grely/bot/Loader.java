@@ -11,10 +11,7 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.shard.GatewayBootstrap;
 import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
-import icu.grely.bot.commands.CommandsHandler;
-import icu.grely.bot.commands.Fun;
-import icu.grely.bot.commands.RankCommands;
-import icu.grely.bot.commands.Spec;
+import icu.grely.bot.commands.*;
 import icu.grely.database.DatabaseConnector;
 import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
@@ -49,6 +46,7 @@ public class Loader {
         Fun.load();
         DatabaseConnector.loadSQLCommands();
         RankCommands.load();
+        Moderation.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             if(!event.getMessage().getAuthor().isPresent())
