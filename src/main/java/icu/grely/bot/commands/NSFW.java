@@ -1,5 +1,6 @@
 package icu.grely.bot.commands;
 
+import arc.util.Log;
 import icu.grely.nsfw.R34;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class NSFW {
                 sendReply(e.getMessage(), "Результатов: "+l.size());
             } catch (Exception ex) {
                 sendReply(e.getMessage(), "Что то не так!");
+                Log.err(ex);
             }
         });
     }
