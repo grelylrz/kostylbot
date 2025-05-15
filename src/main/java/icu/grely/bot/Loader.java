@@ -74,7 +74,7 @@ public class Loader {
             });
             handledMessages+=1;
             handleEvent(event);
-            ReputationHandler.handle(event);
+            // ReputationHandler.handle(event);
             return Mono.empty();
         }).subscribe();
         Log.info("Finally, bot can handle messages.");

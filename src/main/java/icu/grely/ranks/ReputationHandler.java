@@ -10,6 +10,8 @@ import static icu.grely.bot.SendUtils.sendReply;
 public class ReputationHandler {
     public static void handle(MessageCreateEvent event) {
         Message message = event.getMessage();
+        if(message.getAuthor().get().isBot())
+            return;
         message.getMessageReference().ifPresent(msgr->{
             msgr.getMessageId().ifPresent(msgid->{
                 gateway.getMessageById(message.getChannelId(), msgid).flatMap(msgrep->{
