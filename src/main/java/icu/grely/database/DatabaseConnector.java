@@ -105,7 +105,7 @@ public class DatabaseConnector {
                 stmt -> {
                     stmt.setString(1, id);
                     stmt.setLong(2, exp);
-                    stmt.setFloat(1, NYAA);
+                    stmt.setFloat(3, NYAA);
                 },
                 UserSave::ResultSetToUserSave
         );
