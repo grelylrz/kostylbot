@@ -73,10 +73,11 @@ public class Loader {
                     return Mono.empty();
                 }).subscribe();
             });
+            handledMessages+=1;
             handleEvent(event);
             return Mono.empty();
         }).subscribe();
-
+        Log.info("Finally, bot can handle messages.");
         gateway.onDisconnect().doFinally(t->{
             Log.info("Bot disconnected!");
         }).block();

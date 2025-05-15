@@ -66,9 +66,11 @@ public class Spec {
             em.footer("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп", "");
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
+
         registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
-            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count().block()+"\nВладелец бота: "+ owner.getUsername());
+            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nСообщений обработано: "+handledMessages+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count().block()+"\nВладелец бота: "+ owner.getUsername());
         }).setAliases("stats");
+
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
             if(args.length!=1) {
                 sendReply(e.getMessage(), "Должен быть ровно 1 арг.");

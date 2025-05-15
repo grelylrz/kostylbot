@@ -32,6 +32,8 @@ public class Vars {
     @SaveSetting
     public static long handledCommands=0;
     @SaveSetting
+    public static long handledMessages=0;
+    @SaveSetting
     public static String presence="Hello, im kostylbot.";
     public static User owner=null;
     //ranks
