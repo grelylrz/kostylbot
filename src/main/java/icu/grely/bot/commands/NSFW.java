@@ -18,6 +18,6 @@ public class NSFW {
                 sendReply(e.getMessage(), "Что то не так!");
                 Log.err(ex);
             }
-        });
+        }).setActive(false);
     }
 }
