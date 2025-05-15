@@ -138,8 +138,8 @@ public class Spec {
                         UserSave us = getUser(du.getId().asString());
                         em.color(Color.GREEN);
                         //em.addField("<@"+du.getId().asString()+">", "Level: "+us.getLevel()+"\nEXP: "+us.getExp(), true);
-                        em.addField("<@"+ e.getMessage().getAuthor().get().getId().asString()+">", "Создан: <t:"+du.getId().getTimestamp().getEpochSecond()+">\nАйди: "+du.getId().asString(), true);
-                        em.addField("Юзер в базе бота", "Level: "+us.getLevel()+"\nEXP: "+us.getExp()+"Social credit score: "+us.getSocialCredit(), true);
+                        em.addField("<@"+du.getId().asString()+">", "Создан: <t:"+du.getId().getTimestamp().getEpochSecond()+">\nАйди: "+du.getId().asString(), true);
+                        em.addField("Юзер в базе бота", "Level: "+us.getLevel()+"\nEXP: "+us.getExp()+"\nSocial credit score: "+us.getSocialCredit(), true);
                     }
                 } catch (NumberFormatException meow) {
                     em.color(Color.RED);
