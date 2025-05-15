@@ -25,7 +25,7 @@ public class UserSave {
 
     /**
      * @return лвл по формуле √exp/expScale=lvl
-     * как пример, 10 лвл √1250/12.5=10
+     * как пример, 10 лвл √exp/scale=lvl
      * */
      public int getLevel() {
         return (int)Math.sqrt(exp / expScale);
