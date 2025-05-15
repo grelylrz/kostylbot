@@ -71,7 +71,7 @@ public class Spec {
 
         registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
             sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nСообщений обработано: "+handledMessages+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count().block()+"\nВладелец бота: "+ owner.getUsername());
-        }).setAliases("stats");
+        }).setAliases("stats", "стата");
 
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
             if(args.length!=1) {

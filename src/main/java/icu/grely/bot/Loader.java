@@ -13,6 +13,7 @@ import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
 import icu.grely.bot.commands.*;
 import icu.grely.database.DatabaseConnector;
+import icu.grely.ranks.ReputationHandler;
 import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
 
@@ -73,6 +74,7 @@ public class Loader {
             });
             handledMessages+=1;
             handleEvent(event);
+            ReputationHandler.handle(event);
             return Mono.empty();
         }).subscribe();
         Log.info("Finally, bot can handle messages.");

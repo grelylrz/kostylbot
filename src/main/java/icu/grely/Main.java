@@ -55,7 +55,7 @@ public class Main {
             @Override
             public ApplicationType getType() {
                 Log.info("GetType used");
-                return null;
+                return ApplicationType.headless;
             }
 
             @Override
