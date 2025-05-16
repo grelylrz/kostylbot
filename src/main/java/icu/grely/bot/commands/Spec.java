@@ -12,6 +12,7 @@ import discord4j.core.object.Embed;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
+import discord4j.core.spec.BanQuerySpec;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
@@ -157,5 +158,12 @@ public class Spec {
             presence=String.join(" ", args);
             gateway.updatePresence(ClientPresence.doNotDisturb(ClientActivity.playing(presence))).subscribe();
         });
+       registerCommand("banme", "", owner.getId().asLong(), (e, args)->{
+           e.getMessage().getAuthor().get().asMember(Snowflake.of("1298339352346235001")).flatMap(m->{
+               m.ban(BanQuerySpec.builder().deleteMessageDays(7).build()).block();
+               m.unban().block();
+               return Mono.empty();
+           }).subscribe();
+       }).setVisible(false);
     }
 }
