@@ -1,5 +1,6 @@
 package icu.grely.nsfw
 
+import arc.util.Log
 import icu.grely.Vars.Okclient
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,7 +42,8 @@ class R34 {
                         }
                     }
                 }
-            } catch (_: Exception) {
+            } catch (e_: Exception) {
+                Log.err(e_)
             }
 
             return results.toList() as java.util.List<String>
