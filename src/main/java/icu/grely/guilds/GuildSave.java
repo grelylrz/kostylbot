@@ -73,7 +73,6 @@ public class GuildSave {
         } else {
             gs.setKey(key);
             gs.setValue(value);
-            this.getSettings().add(gs);
         }
     }
 }
