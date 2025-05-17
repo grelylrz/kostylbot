@@ -10,7 +10,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 object R34 {
     private val mapper = jacksonObjectMapper()
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class GelbooruPost(
         val file_url: String?
     )
