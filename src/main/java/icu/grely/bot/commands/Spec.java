@@ -172,6 +172,6 @@ public class Spec {
            from.getEmojis().subscribe(i->{
                to.createEmoji(i.getName(), i.getImage().block()).block();
            });
-       });
+       }).setActive(false);
     }
 }
