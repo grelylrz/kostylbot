@@ -1,6 +1,7 @@
 package icu.grely.database;
 
 import arc.util.Log;
+import icu.grely.guilds.GuildSave;
 import icu.grely.ranks.UserSave;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -108,6 +109,13 @@ public class DatabaseConnector {
                     stmt.setFloat(3, NYAA);
                 },
                 UserSave::ResultSetToUserSave
+        );
+    }
+    public static Optional<GuildSave> createGuild(String id) {
+        return executeQueryAsync(
+                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT DO NOTHING",
+                stmt->stmt.setString(1, id),
+                GuildSave::rsToGuildSave
         );
     }
     public static List<UserSave> getLeaderboard() {

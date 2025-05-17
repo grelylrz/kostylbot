@@ -5,6 +5,7 @@ import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.entity.User;
 import icu.grely.annotatins.SaveSetting;
+import icu.grely.guilds.GuildSave;
 import icu.grely.ranks.UserSave;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.OkHttpClient;
@@ -42,6 +43,8 @@ public class Vars {
     public static double expScale=18.2;
     public static long expPerMessage=2;
     public static Seq<UserSave> cachedUsers = new Seq<>();
+    //guilds
+    public static Seq<GuildSave> cachedGuilds = new Seq<>();
     //commands
     public static Seq<String> yesDialogs = Seq.with("✅ Уверен в этом!", "\uD83D\uDC4D Отличная идея!", "\uD83D\uDC4C Звучит хорошо.");
     public static Seq<String> noDialogs = Seq.with("❌ Плохая идея", "\uD83D\uDE35 Даже не думай об этом!", "\uD83D\uDC4E Не думаю, что это кончится хорошо.");
