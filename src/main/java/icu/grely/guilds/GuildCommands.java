@@ -13,7 +13,7 @@ public class GuildCommands {
             e.getMessage().getChannel().ofType(GuildMessageChannel.class).subscribe(ch->{
                 String id = ch.getGuildId().asString();
                 GuildSave gs = getGuild(id);
-                sendReply(e.getMessage(), gs.getSetting("test-value", Boolean.class));
+                sendReply(e.getMessage(), gs.getSetting("test-value", Boolean.class)+"");
                 gs.updateSetting("test-value", !gs.getSetting("test-value", Boolean.class));
             });
         }).setVisible(false);
