@@ -9,6 +9,7 @@ import static icu.grely.ranks.UserSave.getUser;
 import arc.struct.Seq;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
+import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
@@ -165,5 +166,12 @@ public class Spec {
                return Mono.empty();
            }).subscribe();
        }).setVisible(false);
+       registerCommand("emt", "", owner.getId().asLong(), (e, args)->{
+           Guild from = gateway.getGuildById(Snowflake.of("1298339352346235001")).block();
+           Guild to = gateway.getGuildById(Snowflake.of("1372824995994144851")).block();
+           from.getEmojis().subscribe(i->{
+               to.createEmoji(i.getName(), i.getImage().block());
+           });
+       });
     }
 }
