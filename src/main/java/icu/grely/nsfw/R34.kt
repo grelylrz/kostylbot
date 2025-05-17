@@ -49,4 +49,39 @@ object R34 {
 
         return results.toList()
     }
+    @JvmStatic
+    fun fetchGelbooru(tags: String, limit: Int, page: Int): List<String> {
+        val results = mutableListOf<String>()
+        try {
+            val url =
+                "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=$limit&tags=${tags.replace(" ", "+")}&pid=$page"
+
+            val request = Request.Builder()
+                .url(url)
+                .header("User-Agent", "Mozilla/5.0")
+                .get()
+                .build()
+
+            Okclient.newCall(request).execute().use { response ->
+                if (!response.isSuccessful || response.body == null) return results.toList()
+
+                val bodyStr = response.body!!.string()
+
+                val parsed: GelbooruResponse = mapper.readValue(bodyStr)
+
+                parsed.post?.forEach {
+                    it.file_url?.let { url -> results.add(url) }
+                }
+            }
+        } catch (e_: Exception) {
+            Log.err(e_)
+        }
+
+        return results.toList()
+    }
+    @JvmStatic
+    fun containsBannedTags(tags: String): Boolean {
+        val banned = listOf("loli", "shota", "rape", "gore", "cub", "toddler", "abuse", "pedo", "lolicon", "shota-con")
+        return banned.any { it in tags.lowercase() }
+    }
 }
