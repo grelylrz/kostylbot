@@ -13,6 +13,7 @@ import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
 import icu.grely.bot.commands.*;
 import icu.grely.database.DatabaseConnector;
+import icu.grely.guilds.GuildCommands;
 import icu.grely.ranks.ReputationHandler;
 import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
@@ -49,6 +50,7 @@ public class Loader {
         RankCommands.load();
         Moderation.load();
         NSFW.load();
+        GuildCommands.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             if(!event.getMessage().getAuthor().isPresent())

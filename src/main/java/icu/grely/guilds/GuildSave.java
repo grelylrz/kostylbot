@@ -63,7 +63,7 @@ public class GuildSave {
         return gs;
     }
 
-    public void updateSetting(String key, String value) {
+    public void updateSetting(String key, Object value) {
         GuildSetting gs = this.getSettings().find(s->s.getKey().equals(key));
         if(gs==null) {
             gs = new GuildSetting(key, value);
@@ -73,6 +73,30 @@ public class GuildSave {
         } else {
             gs.setKey(key);
             gs.setValue(value);
+        }
+    }
+    @SuppressWarnings("unchecked")
+    public <T> T getSetting(String key, Class<T> type) {
+        GuildSetting setting = this.settings.find(s -> s.getKey().equals(key));
+        if (setting == null) return null;
+
+        Object value = setting.getValue();
+
+        if (type.isInstance(value)) {
+            return (T) value;
+        }
+        String stringValue = value.toString();
+        try {
+            return switch (type.getSimpleName()) {
+                case "Boolean" -> (T) Boolean.valueOf(stringValue);
+                case "Integer" -> (T) Integer.valueOf(stringValue);
+                case "Long"    -> (T) Long.valueOf(stringValue);
+                case "String"  -> (T) stringValue;
+                case "Snowflake" -> (T) Snowflake.of(stringValue);
+                default -> null;
+            };
+        } catch (Exception e) {
+            return null;
         }
     }
 }
