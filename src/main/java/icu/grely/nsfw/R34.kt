@@ -15,7 +15,7 @@ object R34 {
     data class GelbooruPost(
         val file_url: String?
     )
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     data class GelbooruResponse(
         val post: List<GelbooruPost>?
     )
