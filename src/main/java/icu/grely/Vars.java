@@ -7,6 +7,7 @@ import discord4j.core.object.entity.User;
 import icu.grely.annotatins.SaveSetting;
 import icu.grely.ranks.UserSave;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.OkHttpClient;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -19,6 +20,7 @@ public class Vars {
     public static final Dotenv dotenv = Dotenv.load();
     public static final Random random = new Random();
     public static final ExecutorService executor = Executors.newFixedThreadPool(1);
+    public static final OkHttpClient Okclient = new OkHttpClient();
     // db
     public static String DB_USER = dotenv.get("DB_USER");
     public static String DB_PASSWORD = dotenv.get("DB_PASSWORD");

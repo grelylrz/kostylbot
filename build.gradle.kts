@@ -20,6 +20,7 @@ dependencies {
     implementation("org.reflections:reflections:0.10.2")
     implementation("io.github.cdimascio:dotenv-java:3.2.0")
     implementation("org.jsoup:jsoup:1.20.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.woodstox:woodstox-core:6.5.1")
 
     compileOnly("org.projectlombok:lombok:1.18.38")

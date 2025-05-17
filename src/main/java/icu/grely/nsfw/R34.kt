@@ -1,49 +1,50 @@
 package icu.grely.nsfw
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import icu.grely.Vars.Okclient
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 
 class R34 {
     companion object {
-        @Throws(java.lang.Exception::class)
-        fun fetchRule34Links(tags: String, limit: Int): MutableList<String?> {
-            val links: MutableList<String?> = ArrayList<String?>()
+        fun fetchR34(tags: String, limit: Int): List<String> {
+            val results = mutableListOf<String>()
+            try {
+                val url = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=0&limit=$limit&tags=${tags.replace(" ", "+")}"
 
-            val apiUrl = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&limit=" + limit +
-                    "&tags=" + tags.replace(" ", "+")
+                val request = Request.Builder()
+                    .url(url)
+                    .get()
+                    .build()
 
-            val url: URL = URL(apiUrl)
-            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+                Okclient.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful || response.body == null) return results.toList() as java.util.List<String>
 
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0")
-            connection.setRequestMethod("GET")
-            connection.setConnectTimeout(10000)
-            connection.setReadTimeout(10000)
+                    val xml = response.body!!.string()
+                    val factory = DocumentBuilderFactory.newInstance()
+                    val builder = factory.newDocumentBuilder()
+                    val doc: Document = builder.parse(InputSource(StringReader(xml)))
+                    doc.documentElement.normalize()
 
-            val inputStream: InputStream = connection.getInputStream()
-
-            val doc: Document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream)
-            doc.getDocumentElement().normalize()
-
-            val posts: NodeList = doc.getElementsByTagName("post")
-
-            for (i in 0..<posts.getLength()) {
-                val post = posts.item(i) as Element
-                val fileUrl: String = post.getAttribute("file_url")
-                if (!fileUrl.isEmpty()) {
-                    links.add(fileUrl)
+                    val posts = doc.getElementsByTagName("post")
+                    for (i in 0 until posts.length) {
+                        val element = posts.item(i) as? Element ?: continue
+                        val fileUrl = element.getAttribute("file_url")
+                        if (fileUrl.isNotEmpty()) {
+                            results.add(fileUrl)
+                        }
+                    }
                 }
+            } catch (_: Exception) {
             }
 
-            inputStream.close()
-            connection.disconnect()
-
-            return links
+            return results.toList() as java.util.List<String>
         }
     }
 }
