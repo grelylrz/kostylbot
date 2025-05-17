@@ -117,7 +117,7 @@ public class DatabaseConnector {
                 stmt -> stmt.setString(1, id)
         );
         return executeQueryAsync(
-                "SELECT * FROM guilds WHERE id = ?",
+                "SELECT * FROM guilds WHERE guild_id = ?",
                 stmt -> stmt.setString(1, id),
                 GuildSave::rsToGuildSave
         );
