@@ -35,12 +35,20 @@ public class GuildSave {
     }
     public GuildSetting rsToGuildSettings(ResultSet rs) throws SQLException {
         String key = rs.getString("key");
-        String type = rs.getString("type");
+        String rawType = rs.getString("type");
+        String type = switch (rawType.toLowerCase()) {
+            case "boolean" -> "Boolean";
+            case "int" -> "Integer";
+            case "long" -> "Long";
+            case "string" -> "String";
+            case "snowflake" -> "Snowflake";
+            default -> throw new SQLException("Unknown setting type: " + rawType);
+        };
         String value = rs.getString("value");
         GuildSetting setting = switch (type) {
-            case "boolean" -> new GuildSetting(key, Boolean.parseBoolean(value));
-            case "int" -> new GuildSetting(key, Integer.parseInt(value));
-            case "long" -> new GuildSetting(key, Long.parseLong(value));
+            case "Boolean" -> new GuildSetting(key, Boolean.parseBoolean(value));
+            case "Integer" -> new GuildSetting(key, Integer.parseInt(value));
+            case "Long" -> new GuildSetting(key, Long.parseLong(value));
             case "String" -> new GuildSetting(key, value);
             case "Snowflake" -> new GuildSetting(key, Snowflake.of(value));
             default -> throw new SQLException("Unknown setting type: " + type);
@@ -48,6 +56,7 @@ public class GuildSave {
         settings.add(setting);
         return setting;
     }
+
 
     public static void saveGuilds() {
         for(GuildSave g : cachedGuilds) {
