@@ -14,8 +14,7 @@ import java.util.Optional;
 import icu.grely.guilds.GuildSetting;
 
 import static icu.grely.Vars.cachedGuilds;
-import static icu.grely.database.DatabaseConnector.createGuildSettingOrUpdate;
-import static icu.grely.database.DatabaseConnector.createOrGetGuild;
+import static icu.grely.database.DatabaseConnector.*;
 
 @Getter
 @Setter
@@ -28,9 +27,11 @@ public class GuildSave {
     }
 
     public static GuildSave rsToGuildSave(ResultSet rs) throws SQLException {
-        return new GuildSave(
+        GuildSave gs = new GuildSave(
                 rs.getString("id")
         );
+        getGuildSettings(gs.getId(), gs);
+        return gs;
     }
     public GuildSetting rsToGuildSettings(ResultSet rs) throws SQLException {
         String key = rs.getString("key");

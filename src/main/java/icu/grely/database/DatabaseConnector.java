@@ -143,7 +143,7 @@ public class DatabaseConnector {
         return executeQueryList(
           "SELECT * FROM guild_settings WHERE guild_id = ?",
           stmt->stmt.setString(1, id),
-                rs->gs.rsToGuildSettings(rs)
+                gs::rsToGuildSettings
         );
     }
     public static List<UserSave> getLeaderboard() {
