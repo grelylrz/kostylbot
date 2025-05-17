@@ -2,6 +2,7 @@ package icu.grely.nsfw
 
 import icu.grely.Vars.*
 import arc.util.Log
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
