@@ -48,7 +48,7 @@ public class Fun {
             }
         }).setAliases(Seq.with("монетка"));
 
-        registerCommand("dice", "Кубик", (e, args) -> {
+        registerCommand("dice", "Кубик", "[dX] [adv|dis]", (e, args) -> {
             int max = 6;
             boolean advantage = false;
             boolean disadvantage = false;
