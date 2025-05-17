@@ -22,6 +22,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.20.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.fasterxml.woodstox:woodstox-core:6.5.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
     compileOnly("org.projectlombok:lombok:1.18.38")
 

@@ -1,53 +1,51 @@
 package icu.grely.nsfw
 
+import icu.grely.Vars.*
 import arc.util.Log
-import icu.grely.Vars.Okclient
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import org.xml.sax.InputSource;
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
-class R34 {
-    companion object {
-        fun fetchR34(tags: String, limit: Int): List<String> {
-            val results = mutableListOf<String>()
-            try {
-                val url = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=0&limit=$limit&tags=${tags.replace(" ", "+")}"
+object R34 {
+    private val mapper = jacksonObjectMapper()
 
-                val request = Request.Builder()
-                    .url(url)
-                    .get()
-                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-                    .build()
+    data class GelbooruPost(
+        val file_url: String?
+    )
 
-                Okclient.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful || response.body == null) return results.toList() as java.util.List<String>
+    data class GelbooruResponse(
+        val post: List<GelbooruPost>?
+    )
+    @JvmStatic
+    fun fetchGelbooru(tags: String, limit: Int): List<String> {
+        val results = mutableListOf<String>()
+        try {
+            val url =
+                "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=$limit&tags=${tags.replace(" ", "+")}"
 
-                    val xml = response.body!!.string()
-                    val factory = DocumentBuilderFactory.newInstance()
-                    val builder = factory.newDocumentBuilder()
-                    val doc: Document = builder.parse(InputSource(StringReader(xml)))
-                    doc.documentElement.normalize()
+            val request = Request.Builder()
+                .url(url)
+                .header("User-Agent", "Mozilla/5.0")
+                .get()
+                .build()
 
-                    val posts = doc.getElementsByTagName("post")
-                    for (i in 0 until posts.length) {
-                        val element = posts.item(i) as? Element ?: continue
-                        val fileUrl = element.getAttribute("file_url")
-                        if (fileUrl.isNotEmpty()) {
-                            results.add(fileUrl)
-                        }
-                    }
+            Okclient.newCall(request).execute().use { response ->
+                if (!response.isSuccessful || response.body == null) return results.toList()
+
+                val bodyStr = response.body!!.string()
+
+                val parsed: GelbooruResponse = mapper.readValue(bodyStr)
+
+                parsed.post?.forEach {
+                    it.file_url?.let { url -> results.add(url) }
                 }
-            } catch (e_: Exception) {
-                Log.err(e_)
             }
-
-            return results.toList() as java.util.List<String>
+        } catch (e_: Exception) {
+            Log.err(e_)
         }
+
+        return results.toList()
     }
 }
