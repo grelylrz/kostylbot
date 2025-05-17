@@ -10,17 +10,21 @@ import arc.Core;
 import arc.struct.Seq;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
+import discord4j.core.object.entity.ForumTag;
 import discord4j.core.object.entity.Guild;
+import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
+import discord4j.core.object.entity.channel.ForumChannel;
 import discord4j.core.object.presence.ClientActivity;
 import discord4j.core.object.presence.ClientPresence;
-import discord4j.core.spec.BanQuerySpec;
-import discord4j.core.spec.EmbedCreateSpec;
+import discord4j.core.spec.*;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
 import icu.grely.bot.SendUtils;
 import icu.grely.database.DatabaseConnector;
 import icu.grely.ranks.UserSave;
+import lombok.val;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -178,9 +182,16 @@ public class Spec {
        registerCommand("emt", "", owner.getId().asLong(), (e, args)->{
            Guild from = gateway.getGuildById(Snowflake.of("1298339352346235001")).block();
            Guild to = gateway.getGuildById(Snowflake.of("1372824995994144851")).block();
-           from.getEmojis().subscribe(i->{
-               to.createEmoji(i.getName(), i.getImage().block()).block();
+           ForumChannel f = from.getChannelById(Snowflake.of("1372540537869041844")).ofType(ForumChannel.class).block();
+           ForumChannelCreateSpec.Builder b = ForumChannelCreateSpec.builder();
+           b.name(f.getName());
+           for(ForumTag tag : f.getAvailableTags()) {
+               b.addAvailableTag(ForumTagCreateSpec.builder().name(tag.getName()).build());
+           }
+           ForumChannel newf = to.createForumChannel(b.build()).block();
+           f.getAllThreads().subscribe(t->{
+               newf.startThread(t.getName(), ForumThreadMessageCreateSpec.builder().content(t.getLastMessage().block().getContent()).build()).block();
            });
-       }).setActive(false);
+       }).setActive(true);
     }
 }
