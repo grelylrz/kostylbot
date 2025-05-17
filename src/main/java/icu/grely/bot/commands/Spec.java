@@ -192,6 +192,6 @@ public class Spec {
            f.getAllThreads().subscribe(t->{
                newf.startThread(t.getName(), ForumThreadMessageCreateSpec.builder().content(t.getLastMessage().block().getContent()).build()).block();
            });
-       }).setActive(true);
+       }).setActive(false);
     }
 }
