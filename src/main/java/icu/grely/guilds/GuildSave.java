@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import icu.grely.guilds.GuildSetting;
@@ -31,16 +32,22 @@ public class GuildSave {
                 rs.getString("id")
         );
     }
-    public void rsToGuildSettings(ResultSet rs) throws SQLException {
+    public GuildSetting rsToGuildSettings(ResultSet rs) throws SQLException {
+        String key = rs.getString("key");
         String type = rs.getString("type");
-        switch (type) {
-            case "boolean" -> settings.add(new GuildSetting(rs.getString("key"), Boolean.parseBoolean(rs.getString("value"))));
-            case "int"     -> settings.add(new GuildSetting(rs.getString("key"), Integer.parseInt(rs.getString("value"))));
-            case "long"    -> settings.add(new GuildSetting(rs.getString("key"), Long.parseLong(rs.getString("value"))));
-            case "String"  -> settings.add(new GuildSetting(rs.getString("key"), rs.getString("value")));
-            case "Snowflake" -> settings.add(new GuildSetting(rs.getString("key"), Snowflake.of(rs.getString("value"))));
-        }
+        String value = rs.getString("value");
+        GuildSetting setting = switch (type) {
+            case "boolean" -> new GuildSetting(key, Boolean.parseBoolean(value));
+            case "int" -> new GuildSetting(key, Integer.parseInt(value));
+            case "long" -> new GuildSetting(key, Long.parseLong(value));
+            case "String" -> new GuildSetting(key, value);
+            case "Snowflake" -> new GuildSetting(key, Snowflake.of(value));
+            default -> throw new SQLException("Unknown setting type: " + type);
+        };
+        settings.add(setting);
+        return setting;
     }
+
     public static void saveGuilds() {
         for(GuildSave g : cachedGuilds) {
             for(GuildSetting gs : g.getSettings()) {
@@ -60,6 +67,7 @@ public class GuildSave {
             }
             cachedGuilds.add(gs);
         }
+
         return gs;
     }
 

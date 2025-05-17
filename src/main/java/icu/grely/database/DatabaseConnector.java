@@ -2,6 +2,7 @@ package icu.grely.database;
 
 import arc.util.Log;
 import icu.grely.guilds.GuildSave;
+import icu.grely.guilds.GuildSetting;
 import icu.grely.ranks.UserSave;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -127,16 +128,22 @@ public class DatabaseConnector {
                 "INSERT INTO guilds (id) VALUES (?) ON CONFLICT (id) DO NOTHING",
                 stmt -> stmt.setString(1, id)
         );
-
         return executeUpdate(
-                "INSERT INTO guild_settings (guild_id, value, key, type) VALUES (?, ?, ?, ?) " +
-                        "ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value, key = EXCLUDED.key, type = EXCLUDED.type",
+                "INSERT INTO guild_settings (guild_id, key, value, type) VALUES (?, ?, ?, ?) " +
+                        "ON CONFLICT (guild_id, key) DO UPDATE SET value = EXCLUDED.value, type = EXCLUDED.type",
                 stmt -> {
                     stmt.setString(1, id);
-                    stmt.setString(2, value);
-                    stmt.setString(3, key);
+                    stmt.setString(2, key);
+                    stmt.setString(3, value);
                     stmt.setString(4, type);
                 }
+        );
+    }
+    public static List<GuildSetting> getGuildSettings(String id, GuildSave gs) {
+        return executeQueryList(
+          "SELECT * FROM guild_settings WHERE guild_id = ?",
+          stmt->stmt.setString(1, id),
+                rs->gs.rsToGuildSettings(rs)
         );
     }
     public static List<UserSave> getLeaderboard() {
