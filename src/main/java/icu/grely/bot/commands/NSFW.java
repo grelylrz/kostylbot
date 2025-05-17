@@ -9,6 +9,7 @@ import icu.grely.nsfw.R34;
 import java.util.Arrays;
 import java.util.List;
 
+import static icu.grely.Vars.prefix;
 import static icu.grely.bot.SendUtils.sendReply;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
 
@@ -16,7 +17,7 @@ public class NSFW {
     public static void load() {
         registerCommand("r34", "Ох зря я сюда полез...", "<tags...> <page> <limit>", (e, args)->{
             if(args.length==0) {
-                sendReply(e.getMessage(), "Неверные теги.");
+                sendReply(e.getMessage(), "Неверные теги.\nПодсказка: вы можете указать только теги, а можете указать теги, страницу и лимит постов(максимальный лимит 20)\nПример: "+prefix+"r34 neko maid solo 2 20");
                 return;
             }
             if(R34.containsBannedTags(String.join(" ", args))) {
