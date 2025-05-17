@@ -170,7 +170,7 @@ public class Spec {
            Guild from = gateway.getGuildById(Snowflake.of("1298339352346235001")).block();
            Guild to = gateway.getGuildById(Snowflake.of("1372824995994144851")).block();
            from.getEmojis().subscribe(i->{
-               to.createEmoji(i.getName(), i.getImage().block());
+               to.createEmoji(i.getName(), i.getImage().block()).block();
            });
        });
     }
