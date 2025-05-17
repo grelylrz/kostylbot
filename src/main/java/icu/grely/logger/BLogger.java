@@ -1,5 +1,6 @@
 package icu.grely.logger;
 
+import arc.struct.Seq;
 import arc.util.Log;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import static icu.grely.Vars.*;
 
 public class BLogger {
     static boolean loadedLogger;
+    public static Seq<String> LogBuffer = new Seq<>();
     public static void loadLogger() {
         if (loadedLogger) return;
         // IDK how arc Log.debug works.
@@ -23,6 +25,7 @@ public class BLogger {
         Log.logger = (level, text) -> {
             //System.out.println(level.toString());
             String result = tags[level.ordinal()] + " " + text;
+            LogBuffer.add(text.replace("\n", "")+"\n");
             System.out.println(result);
         };
 

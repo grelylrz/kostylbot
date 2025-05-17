@@ -12,8 +12,11 @@ import icu.grely.bot.Loader;
 import icu.grely.logger.LoggerProvider;
 import reactor.util.Loggers;
 
+import java.nio.LongBuffer;
+
 import static icu.grely.SettingsLoader.saveSettings;
-import static icu.grely.logger.BLogger.loadLogger;
+import static icu.grely.Vars.executor;
+import static icu.grely.logger.BLogger.*;
 import static icu.grely.ranks.UserSave.saveUsers;
 
 public class Main {
@@ -28,10 +31,20 @@ public class Main {
             saveSettings();
             saveUsers();
             Core.settings.forceSave();
+            for(String b : LogBuffer) {
+                write("logs/log.txt", b);
+            }
+            LogBuffer.clear();
         }));
         Timer.schedule(()->{
             // Сохраняю юзеров в бд, чтобы почистить память.
             saveUsers();
+            executor.submit(()->{
+                for(String b : LogBuffer) {
+                    write("logs/log.txt", b);
+                }
+                LogBuffer.clear();
+            });
         }, 0, 10*60);
         Loader.load();
     }
@@ -82,6 +95,10 @@ public class Main {
             public void exit() {
                 Log.info("Exit used");
                 System.exit(0);
+            }
+
+            public void submit(Runnable r) {
+                executor.submit(r);
             }
         };
     }

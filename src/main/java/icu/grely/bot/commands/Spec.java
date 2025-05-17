@@ -6,6 +6,7 @@ import static icu.grely.bot.commands.CommandsHandler.commands;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
 import static icu.grely.ranks.UserSave.getUser;
 
+import arc.Core;
 import arc.struct.Seq;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.Embed;
@@ -71,8 +72,16 @@ public class Spec {
             SendUtils.sendEmbedReply(em.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
 
-        registerCommand("info", "Посмотреть информацию о боте.", (e, args)->{
-            sendReply(e.getMessage(), "Команд обработано: "+handledCommands+"\nСообщений обработано: "+handledMessages+"\nЮзеров: "+gateway.getUsers().count().block()+"\nСерверов: "+gateway.getGuilds().count().block()+"\nВладелец бота: "+ owner.getUsername());
+        registerCommand("info", "Посмотреть информацию о боте.", (e, args) -> {
+            long heapUsed = Core.app.getJavaHeap() / (1024 * 1024);
+            sendReply(e.getMessage(),
+                    "Команд обработано: " + handledCommands +
+                            "\nСообщений обработано: " + handledMessages +
+                            "\nЮзеров: " + gateway.getUsers().count().block() +
+                            "\nСерверов: " + gateway.getGuilds().count().block() +
+                            "\nRAM Used: " + heapUsed + "MB" +
+                            "\nВладелец бота: " + owner.getUsername()
+            );
         }).setAliases("stats", "стата");
 
         registerCommand("avatar", "Посмотреть аватарку пользователя.", "<user>", (e, args)->{
