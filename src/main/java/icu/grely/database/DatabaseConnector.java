@@ -113,18 +113,18 @@ public class DatabaseConnector {
     }
     public static Optional<GuildSave> createOrGetGuild(String id) {
         executeUpdate(
-                "INSERT INTO guilds (guild_id) VALUES (?) ON CONFLICT (id) DO NOTHING",
+                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT (id) DO NOTHING",
                 stmt -> stmt.setString(1, id)
         );
         return executeQueryAsync(
-                "SELECT * FROM guilds WHERE guild_id = ?",
+                "SELECT * FROM guilds WHERE id = ?",
                 stmt -> stmt.setString(1, id),
                 GuildSave::rsToGuildSave
         );
     }
     public static boolean createGuildSettingOrUpdate(String id, String key, String value, String type) {
         executeUpdate(
-                "INSERT INTO guilds (guild_id) VALUES (?) ON CONFLICT (id) DO NOTHING",
+                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT (id) DO NOTHING",
                 stmt -> stmt.setString(1, id)
         );
 
