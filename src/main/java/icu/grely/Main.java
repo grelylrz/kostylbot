@@ -16,6 +16,7 @@ import java.nio.LongBuffer;
 
 import static icu.grely.SettingsLoader.saveSettings;
 import static icu.grely.Vars.executor;
+import static icu.grely.guilds.GuildSave.saveGuilds;
 import static icu.grely.logger.BLogger.*;
 import static icu.grely.ranks.UserSave.saveUsers;
 
@@ -30,6 +31,7 @@ public class Main {
             Log.info("Saving, please, wait.");
             saveSettings();
             saveUsers();
+            saveGuilds();
             Core.settings.forceSave();
             for(String b : LogBuffer) {
                 write("logs/log.txt", b);
@@ -37,8 +39,9 @@ public class Main {
             LogBuffer.clear();
         }));
         Timer.schedule(()->{
-            // Сохраняю юзеров в бд, чтобы почистить память.
+            Log.info("Saving data!");
             saveUsers();
+            saveGuilds();
             executor.submit(()->{
                 for(String b : LogBuffer) {
                     write("logs/log.txt", b);

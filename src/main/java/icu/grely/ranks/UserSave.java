@@ -44,12 +44,12 @@ public class UserSave {
          );
     }
     public synchronized static void saveUsers() {
-         Log.info("Saving cached users to db!");
+         // Log.info("Saving cached users to db!");
          for(UserSave u : cachedUsers) {
              createOrUpdateUser(u.getId(), u.getExp(), u.getSocialCredit());
          }
          cachedUsers.clear();
-         Log.info("Cached users saved!");
+         // Log.info("Cached users saved!");
     }
     public synchronized static UserSave getUser(String id) {
         UserSave us = cachedUsers.find(u->u.getId().equals(id));

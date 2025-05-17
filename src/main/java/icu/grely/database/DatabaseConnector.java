@@ -111,11 +111,32 @@ public class DatabaseConnector {
                 UserSave::ResultSetToUserSave
         );
     }
-    public static Optional<GuildSave> createGuild(String id) {
+    public static Optional<GuildSave> createOrGetGuild(String id) {
+        executeUpdate(
+                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT (id) DO NOTHING",
+                stmt -> stmt.setString(1, id)
+        );
         return executeQueryAsync(
-                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT DO NOTHING",
-                stmt->stmt.setString(1, id),
+                "SELECT * FROM guilds WHERE id = ?",
+                stmt -> stmt.setString(1, id),
                 GuildSave::rsToGuildSave
+        );
+    }
+    public static boolean createGuildSettingOrUpdate(String id, String key, String value, String type) {
+        executeUpdate(
+                "INSERT INTO guilds (id) VALUES (?) ON CONFLICT (id) DO NOTHING",
+                stmt -> stmt.setString(1, id)
+        );
+
+        return executeUpdate(
+                "INSERT INTO guild_settings (id, value, key, type) VALUES (?, ?, ?, ?) " +
+                        "ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value, key = EXCLUDED.key, type = EXCLUDED.type",
+                stmt -> {
+                    stmt.setString(1, id);
+                    stmt.setString(2, value);
+                    stmt.setString(3, key);
+                    stmt.setString(4, type);
+                }
         );
     }
     public static List<UserSave> getLeaderboard() {

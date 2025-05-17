@@ -8,10 +8,13 @@ import lombok.Setter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import icu.grely.guilds.GuildSetting;
 
 import static icu.grely.Vars.cachedGuilds;
+import static icu.grely.database.DatabaseConnector.createGuildSettingOrUpdate;
+import static icu.grely.database.DatabaseConnector.createOrGetGuild;
 
 @Getter
 @Setter
@@ -30,21 +33,47 @@ public class GuildSave {
     }
     public void rsToGuildSettings(ResultSet rs) throws SQLException {
         String type = rs.getString("type");
-        if(type.equals("boolean")) {
-            this.settings.add(new GuildSetting(rs.getString("key"), Boolean.parseBoolean(rs.getString("value"))));
-        } else if(type.equals("int")){
-            this.settings.add(new GuildSetting(rs.getString("key"), Integer.parseInt(rs.getString("value"))));
-        } else if(type.equals("long")) {
-            this.settings.add(new GuildSetting(rs.getString("key"), Long.parseLong(rs.getString("value"))));
-        } else if(type.equals("String")){
-            this.settings.add(new GuildSetting(rs.getString("key"), rs.getString("value")));
-        } else if(type.equals("Snowflake")) {
-            this.settings.add(new GuildSetting(rs.getString("key"), Snowflake.of(rs.getString("value"))));
+        switch (type) {
+            case "boolean" -> settings.add(new GuildSetting(rs.getString("key"), Boolean.parseBoolean(rs.getString("value"))));
+            case "int"     -> settings.add(new GuildSetting(rs.getString("key"), Integer.parseInt(rs.getString("value"))));
+            case "long"    -> settings.add(new GuildSetting(rs.getString("key"), Long.parseLong(rs.getString("value"))));
+            case "String"  -> settings.add(new GuildSetting(rs.getString("key"), rs.getString("value")));
+            case "Snowflake" -> settings.add(new GuildSetting(rs.getString("key"), Snowflake.of(rs.getString("value"))));
         }
     }
     public static void saveGuilds() {
-        Log.info("Time to save cached guilds!");
         for(GuildSave g : cachedGuilds) {
+            for(GuildSetting gs : g.getSettings()) {
+                createGuildSettingOrUpdate(g.getId(), gs.getKey(), gs.getValue().toString(), gs.getValue().getClass().getSimpleName());
+            }
+        }
+        cachedGuilds.clear();
+    }
+    public static GuildSave getGuild(String id) {
+        GuildSave gs = cachedGuilds.find(g -> g.getId().equals(id));
+        if (gs == null) {
+            Optional<GuildSave> gsopt = createOrGetGuild(id);
+            if (gsopt.isPresent()) {
+                gs = gsopt.get();
+            } else {
+                gs = new GuildSave(id);
+            }
+            cachedGuilds.add(gs);
+        }
+        return gs;
+    }
+
+    public void updateSetting(String key, String value) {
+        GuildSetting gs = this.getSettings().find(s->s.getKey().equals(key));
+        if(gs==null) {
+            gs = new GuildSetting(key, value);
+            gs.setKey(key);
+            gs.setValue(value);
+            this.getSettings().add(gs);
+        } else {
+            gs.setKey(key);
+            gs.setValue(value);
+            this.getSettings().add(gs);
         }
     }
 }
