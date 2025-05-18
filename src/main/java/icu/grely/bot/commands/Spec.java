@@ -117,7 +117,7 @@ public class Spec {
             } catch (Exception er) {
                 sendReply(e.getMessage(), "Неизвестный пользователь.");
             }
-        }).setAliases("аватар");
+        }).setDisailable(true).setAliases("аватар");
         registerCommand("server", "Посмотреть информацию о сервере", (ev, args)->{
             ev.getGuild().flatMap(g->{
                 // sendEmbedReply(EmbedCreateSpec.builder().addField(g.getName(), "Участников: "+g.getMemberCount()+"\nВладелец: <@"+g.getOwnerId()+">\nМожно выкинуть с сервера: "+g.getPruneCount(7)+" 7d/"+g.getPruneCount(30)+" 30d\nКаналов: "+g.getChannels().count()+"\nБанов: "+g.getBans().count()+"\nБустов: "+g.getPremiumSubscriptionCount().orElse(0), false).footer("", g.getIconUrl(Image.Format.PNG).orElse("")).color(Color.CYAN).build(), ev.getMessage());
@@ -144,7 +144,7 @@ public class Spec {
 
                 return Mono.empty();
             }).subscribe();
-        }).setAliases("сервер", "serverinfo", "серверинфо");
+        }).setDisailable(true).setAliases("сервер", "serverinfo", "серверинфо");
         registerCommand("user", "Посмотреть информацию о юзере", "[ping]", (e, args)->{
             EmbedCreateSpec.Builder em=EmbedCreateSpec.builder();
             if(args.length==0) {
@@ -173,7 +173,7 @@ public class Spec {
             }
             em.footer("Подсказка: Юзеры имеют social credit score, данное значение является между-серверным, оно снимается за баны/мьюты/варны, также в скором будущем смогут повышать. Некоторые владельцы серверов могут опираться на него.", "");
             sendEmbedReply(em.build(), e.getMessage());
-        }).setAliases("юзер");
+        }).setDisailable(true).setAliases("юзер");
         registerCommand("presence", "Set presence", "<query...>", owner.getId().asLong(), (e, args) -> {
             presence=String.join(" ", args);
             gateway.updatePresence(ClientPresence.doNotDisturb(ClientActivity.playing(presence))).subscribe();
