@@ -41,7 +41,7 @@ public class Spec {
                 em.title("Список команд.");
                 StringBuilder cname = new StringBuilder();
                 for (CommandsHandler.BotCommand c : commands) {
-                    if (c.isVisible() && c.isActive() && !c.isDisable()) {
+                    if (c.isVisible() && c.isActive()) {
                         cname.append(c.getName());
                         for (String alias : c.getAliases())
                             cname.append("/" + alias);
