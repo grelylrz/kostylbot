@@ -53,7 +53,7 @@ public class Spec {
                         cname.setLength(0);
                     }
                 }
-                em.addField("disaible-commandName", "Введите disaible-command заменив command на название команды и вы сможете отключить ее на вашем сервере!", true);
+                //em.addField("disaible-commandName", "Введите disaible-command заменив command на название команды и вы сможете отключить ее на вашем сервере!", true);
             } else {
                 CommandsHandler.BotCommand c = commands.find(m->{
                     return m.name.equals(args[0]);
@@ -206,6 +206,14 @@ public class Spec {
                 registerCommand("disaible-"+c.getName(), "Переключить такую то команду, т.е. смогут ли ее использовать.", (e, args)->{
                     val gs = getGuild(e.getGuildId().get().asString());
                     e.getMember().ifPresent(m->{
+                        if(m.getId().asString().equals(owner.getId().asString())) {
+                            Boolean current = gs.getSetting(c.getName()+"-DISAIBLE", Boolean.class);
+                            if(current==null)
+                                current=false;
+                            sendReply(e.getMessage(), "Переключено "+current+" -> "+!current);
+                            gs.updateSetting(c.getName()+"-DISAIBLE", !current);
+                            return;
+                        }
                         m.getRoles().subscribe(role->{
                             if(role.getPermissions().contains(Permission.MANAGE_GUILD) || role.getPermissions().contains(Permission.ADMINISTRATOR)) {
                                 Boolean current = gs.getSetting(c.getName()+"-DISAIBLE", Boolean.class);
