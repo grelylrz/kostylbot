@@ -86,20 +86,20 @@ public class Fun {
             int iq = random.nextInt(50) + 50;
             String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
             sendReply(e.getMessage(), target + " имеет IQ: " + iq);
-        });
+        }).setDisailable(true);
         registerCommand("sus", "Подозрительность", "[target]", (e, args) -> {
             int percent = random.nextInt(101);
             String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
             sendReply(e.getMessage(), target + " подозрителен на " + percent + "% 🔺");
-        });
+        }).setDisailable(true);
         registerCommand("egg", "Яйцо", "", (e, args) -> {
             String[] eggs = {"🥚", "🥚🥚", "🍳", "🐣", "🐔", "🥚🍳🐣"};
             sendReply(e.getMessage(), eggs[random.nextInt(eggs.length)]);
-        });
+        }).setDisailable(true);
         registerCommand("howgay", "Оценка геевости", "[target]", (e, args) -> {
             int percent = random.nextInt(101);
             String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
             sendReply(e.getMessage(), target + " гей на " + percent + "% 🌈");
-        });
+        }).setDisailable(true);
     }
 }
