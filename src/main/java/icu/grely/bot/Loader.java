@@ -55,6 +55,8 @@ public class Loader {
         gateway.on(MessageCreateEvent.class, event -> {
             if(!event.getMessage().getAuthor().isPresent())
                 return Mono.empty();
+            if(!event.getGuildId().isPresent())
+                return Mono.empty();
             User author = event.getMessage().getAuthor().get();
             if(author.isBot())
                 return Mono.empty();

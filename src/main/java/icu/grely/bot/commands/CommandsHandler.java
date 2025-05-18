@@ -13,6 +13,7 @@ import icu.grely.Vars;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import reactor.core.publisher.Mono;
 
 import javax.print.DocFlavor;
@@ -22,6 +23,7 @@ import java.util.function.BiConsumer;
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendMessage;
 import static icu.grely.bot.SendUtils.sendReply;
+import static icu.grely.guilds.GuildSave.getGuild;
 
 public class CommandsHandler {
     public static Seq<BotCommand> commands = new Seq<>();
@@ -60,6 +62,8 @@ public class CommandsHandler {
         if (authorOpt.isPresent() && authorOpt.get().isBot()) {
             return;
         }
+        if(!event.getGuildId().isPresent())
+            return;
         User author = authorOpt.get();
         String content = message.getContent();
         String firstChars = content.substring(0, 2);
@@ -76,6 +80,20 @@ public class CommandsHandler {
             if(command != null) {
                 handledCommands+=1;
                 // Arrays.copyOfRange(args, 1, args.length)
+                if(command.isDisailable()) {
+                    var gs = getGuild(message.getGuildId().get().asString()); // получаю сохранение гильды
+                    String some = command.getName() + "-DISAIBLE"; // формирую запрос
+                    Boolean disaibled = gs.getSetting(some, Boolean.class); // получаю статус выключения команды.
+                    // если выключение равно нуллу то ставлю на фалс и пишу в бд.
+                    if (disaibled == null) {
+                        disaibled = false;
+                        gs.updateSetting(some, disaibled);
+                    }
+                    if (disaibled) {
+                        sendReply(message, "Эта команда здесь отключена!");
+                        return;
+                    }
+                }
                 if(command.getMemberID() == 0) {
                     command.exec(event, Arrays.copyOfRange(args, 1, args.length));
                 } else {
@@ -105,13 +123,14 @@ public class CommandsHandler {
     @Getter
     @Setter
     @ToString
+    @Accessors(chain = true)
     public static class BotCommand {
-        public String name;
-        public String description;
-        public BiConsumer<MessageCreateEvent, String[]> executor;
-        public long memberID;
-        public boolean visible = true, active = true;
-        public String argsN = "";
+        String name;
+        String description;
+        BiConsumer<MessageCreateEvent, String[]> executor;
+        long memberID;
+        boolean visible = true, active = true, disailable = false, disable = false/*Команда ЧЕРЕЗ которую отключаются/включаются другие*/;
+        String argsN = "";
         Seq<String> aliases = new Seq<>();
 
         BotCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {

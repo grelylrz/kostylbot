@@ -39,15 +39,19 @@ public class Spec {
                 em.title("Список команд.");
                 StringBuilder cname = new StringBuilder();
                 for (CommandsHandler.BotCommand c : commands) {
-                    if (c.isVisible() && c.isActive()) {
+                    if (c.isVisible() && c.isActive() && !c.isDisable()) {
                         cname.append(c.getName());
                         for (String alias : c.getAliases())
                             cname.append("/" + alias);
                         // name/alias1/alias2
+                        if(c.isDisailable())
+                            em.addField(cname.toString(), c.getDescription() + "\n" + c.getArgsN()+"\nЭту команду можно отключить!", false);
+                        else
                         em.addField(cname.toString(), c.getDescription() + "\n" + c.getArgsN(), false);
                         cname.setLength(0);
                     }
                 }
+                em.addField("disaible-commandName", "Введите disaible-command заменив command на название команды и вы сможете отключить ее на вашем сервере!", true);
             } else {
                 CommandsHandler.BotCommand c = commands.find(m->{
                     return m.name.equals(args[0]);
@@ -194,4 +198,5 @@ public class Spec {
            });
        }).setActive(false);
     }
+
 }
