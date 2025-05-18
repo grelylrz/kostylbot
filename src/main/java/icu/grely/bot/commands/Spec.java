@@ -4,6 +4,7 @@ import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.*;
 import static icu.grely.bot.commands.CommandsHandler.commands;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.guilds.GuildSave.getGuild;
 import static icu.grely.ranks.UserSave.getUser;
 
 import arc.Core;
@@ -20,6 +21,7 @@ import discord4j.core.object.presence.ClientPresence;
 import discord4j.core.spec.*;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
+import discord4j.rest.util.Permission;
 import icu.grely.bot.SendUtils;
 import icu.grely.database.DatabaseConnector;
 import icu.grely.ranks.UserSave;
@@ -198,5 +200,24 @@ public class Spec {
            });
        }).setActive(false);
     }
-
+    public static void generateDisaibleCommand() {
+        for(CommandsHandler.BotCommand c : commands) {
+            if(c.isDisailable()) {
+                registerCommand("disaible-"+c.getName(), "Переключить такую то команду, т.е. смогут ли ее использовать.", (e, args)->{
+                    val gs = getGuild(e.getGuildId().get().asString());
+                    e.getMember().ifPresent(m->{
+                        m.getRoles().subscribe(role->{
+                            if(role.getPermissions().contains(Permission.MANAGE_GUILD)) {
+                                Boolean current = gs.getSetting(c.getName()+"-DISAIBLE", Boolean.class);
+                                if(current==null)
+                                    current=false;
+                                sendReply(e.getMessage(), "Переключено "+current+" -> "+!current);
+                                gs.updateSetting(c.getName()+"-DISAIBLE", !current);
+                            }
+                        });
+                    });
+                }).setDisable(true).setDisailable(false);
+            }
+        }
+    }
 }
