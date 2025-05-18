@@ -207,7 +207,7 @@ public class Spec {
                     val gs = getGuild(e.getGuildId().get().asString());
                     e.getMember().ifPresent(m->{
                         m.getRoles().subscribe(role->{
-                            if(role.getPermissions().contains(Permission.MANAGE_GUILD)) {
+                            if(role.getPermissions().contains(Permission.MANAGE_GUILD) || role.getPermissions().contains(Permission.ADMINISTRATOR)) {
                                 Boolean current = gs.getSetting(c.getName()+"-DISAIBLE", Boolean.class);
                                 if(current==null)
                                     current=false;
