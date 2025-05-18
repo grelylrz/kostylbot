@@ -213,6 +213,7 @@ public class Spec {
                                     current=false;
                                 sendReply(e.getMessage(), "Переключено "+current+" -> "+!current);
                                 gs.updateSetting(c.getName()+"-DISAIBLE", !current);
+                                return;
                             }
                         });
                     });
