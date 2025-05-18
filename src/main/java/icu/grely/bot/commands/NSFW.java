@@ -56,6 +56,6 @@ public class NSFW {
                 sendReply(e.getMessage(), "Что то не так!");
                 Log.err(ex);
             }
-        }).setActive(true);
+        }).setActive(true).setDisailable(true);
     }
 }
