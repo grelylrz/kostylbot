@@ -7,6 +7,7 @@ public enum CommandCategory {
     ranking("ranking"),
     spec("spec"), // aka utils
     unkown("unkown"),
+    disable("disable"),
     NSFW("");
 
     String name;

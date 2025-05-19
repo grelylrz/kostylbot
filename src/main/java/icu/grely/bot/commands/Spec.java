@@ -201,6 +201,7 @@ public class Spec {
        }).setActive(false);
     }
     public static void generateDisaibleCommand() {
+        setCategory("disable");
         for(CommandsHandler.BotCommand c : commands) {
             if(c.isDisailable()) {
                 registerCommand("disaible-"+c.getName(), "Переключить такую то команду, т.е. смогут ли ее использовать.", (e, args)->{
