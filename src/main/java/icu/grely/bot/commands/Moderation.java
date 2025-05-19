@@ -3,6 +3,7 @@ package icu.grely.bot.commands;
 import discord4j.common.util.Snowflake;
 import discord4j.core.object.entity.User;
 import discord4j.core.spec.BanQuerySpec;
+import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
 
 import java.time.Instant;
@@ -36,6 +37,9 @@ public class Moderation {
                         String reason = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
+                        u.getPrivateChannel().subscribe(pr->{
+                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build());
+                        });
                         g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build());
                     });
                 });
