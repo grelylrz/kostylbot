@@ -8,9 +8,11 @@ import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendEmbedReply;
 import static icu.grely.bot.SendUtils.sendReply;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.bot.commands.CommandsHandler.setCategory;
 
 public class Fun {
     public static void load() {
+        setCategory("fun");
         registerCommand("ball", "Покатать шары", "<question...>", (e, args)->{
             if(args.length==0) {
                 sendReply(e.getMessage(), "Invalid args.");
@@ -81,7 +83,7 @@ public class Fun {
                 sendReply(e.getMessage(), "Выпадает " + result + " (1–" + max + ")");
             }
         }).setAliases(Seq.with("кубик"));
-
+        setCategory("brainrot");
         registerCommand("stupid", "Оценка глупости", "[target]", (e, args) -> {
             int iq = random.nextInt(50) + 50;
             String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");

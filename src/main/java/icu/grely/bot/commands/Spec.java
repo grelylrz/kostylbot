@@ -2,8 +2,7 @@ package icu.grely.bot.commands;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.*;
-import static icu.grely.bot.commands.CommandsHandler.commands;
-import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.bot.commands.CommandsHandler.*;
 import static icu.grely.guilds.GuildSave.getGuild;
 import static icu.grely.ranks.UserSave.getUser;
 
@@ -35,6 +34,7 @@ import java.time.temporal.TemporalUnit;
 
 public class Spec {
     public static void load() {
+        setCategory("spec");
         registerCommand("help", "Посмотреть список команд.", "[command-name]", (e, args)->{
             EmbedCreateSpec.Builder em=EmbedCreateSpec.builder().color(Color.SEA_GREEN);
             if(args.length==0) {

@@ -14,11 +14,13 @@ import static icu.grely.Vars.cachedUsers;
 import static icu.grely.Vars.gateway;
 import static icu.grely.bot.SendUtils.*;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.bot.commands.CommandsHandler.setCategory;
 import static icu.grely.database.DatabaseConnector.*;
 import static icu.grely.ranks.UserSave.getUser;
 
 public class RankCommands {
     public static void load() {
+        setCategory("ranking");
         registerCommand("rank", "Посмотреть лвл/ранг, возвращает ваш ранг если вы не пинганули пользователя.", "[user-ping]", (ev, args)->{
             EmbedCreateSpec.Builder em=EmbedCreateSpec.builder();
             if(args.length==0) {

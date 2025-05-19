@@ -27,6 +27,7 @@ import static icu.grely.guilds.GuildSave.getGuild;
 
 public class CommandsHandler {
     public static Seq<BotCommand> commands = new Seq<>();
+    private static String category;
     /**Зарегестрировать обычную команду.*/
     public static BotCommand registerCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
         BotCommand c = new BotCommand(name, description, executor);
@@ -54,6 +55,9 @@ public class CommandsHandler {
         c.setArgsN(argsN);
         commands.add(c);
         return c;
+    }
+    public static void setCategory(String category) {
+        category=category;
     }
     /**Обработать эвент получения сообщения.*/
     public static void handleEvent(MessageCreateEvent event) {
@@ -130,13 +134,14 @@ public class CommandsHandler {
         BiConsumer<MessageCreateEvent, String[]> executor;
         long memberID;
         boolean visible = true, active = true, disailable = false, disable = false/*Команда ЧЕРЕЗ которую отключаются/включаются другие*/;
-        String argsN = "";
+        String argsN = "", category = "unset";
         Seq<String> aliases = new Seq<>();
 
         BotCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
             this.name = name;
             this.description = description;
             this.executor = executor;
+            this.category=CommandsHandler.category;
         }
 
         public void exec(MessageCreateEvent e, String[] args) {
