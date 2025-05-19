@@ -212,9 +212,12 @@ public class DatabaseConnector {
                 stmt -> {},
                 Ban::resultSetToBan
         );
-
-        for (Ban ban : bansToUnban) {
-            Ban.handleUnBan(ban);
+        try {
+            for (Ban ban : bansToUnban) {
+                Ban.handleUnBan(ban);
+            }
+        } catch(SQLException meow) {
+            Log.err("Unban failed", meow);
         }
     }
     public static void loadSQLCommands() {
