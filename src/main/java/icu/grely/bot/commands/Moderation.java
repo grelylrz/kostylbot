@@ -39,7 +39,7 @@ public class Moderation {
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
                         u.getPrivateChannel().subscribe(pr->{
-                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).onErrorResume(r->{
+                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+System.currentTimeMillis()/1000+seconds+">").build()).onErrorResume(r->{
                                 return Mono.empty(); // окей, ну не могу я отправлять сообщения я ему, почему нельзя выполнить код дальше то?
                             }).block();
                             g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
