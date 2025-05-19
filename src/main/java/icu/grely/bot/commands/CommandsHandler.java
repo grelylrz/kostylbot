@@ -27,7 +27,7 @@ import static icu.grely.guilds.GuildSave.getGuild;
 
 public class CommandsHandler {
     public static Seq<BotCommand> commands = new Seq<>();
-    private static String category;
+    private static CommandCategory category;
     /**Зарегестрировать обычную команду.*/
     public static BotCommand registerCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
         BotCommand c = new BotCommand(name, description, executor);
@@ -56,8 +56,14 @@ public class CommandsHandler {
         commands.add(c);
         return c;
     }
-    public static void setCategory(String category) {
-        category=category;
+    public static void setCategory(String c) {
+        CommandCategory ct = CommandCategory.parseCategory(c);
+        if(ct.name.equals(CommandCategory.unkown))
+            Log.warn("@ is unkown category!", c);
+        category=ct;
+    }
+    public static void setCategory(CommandCategory ct) {
+        category=ct;
     }
     /**Обработать эвент получения сообщения.*/
     public static void handleEvent(MessageCreateEvent event) {
@@ -71,7 +77,7 @@ public class CommandsHandler {
         User author = authorOpt.get();
         String content = message.getContent();
         if(content.contains("@everyone")) {
-            sendReply(message, "Я не работаю с сообщениями содержащии пинг эвриван.");
+            sendReply(message, "Я не работаю с сообщениями содержащими пинг эвриван.");
             return;
         }
         String firstChars = content.substring(0, 2);
@@ -138,7 +144,8 @@ public class CommandsHandler {
         BiConsumer<MessageCreateEvent, String[]> executor;
         long memberID;
         boolean visible = true, active = true, disailable = false, disable = false/*Команда ЧЕРЕЗ которую отключаются/включаются другие*/;
-        String argsN = "", category = "unset";
+        String argsN = "";
+        CommandCategory category = CommandCategory.unkown;
         Seq<String> aliases = new Seq<>();
 
         BotCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
