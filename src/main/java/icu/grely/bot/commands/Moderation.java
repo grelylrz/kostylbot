@@ -38,10 +38,10 @@ public class Moderation {
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
                         u.getPrivateChannel().subscribe(pr->{
-                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).subscribe();
+                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).block();
+                            g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
+                            sendReply(e.getMessage(), "Success.");
                         });
-                        g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
-                        sendReply(e.getMessage(), "Success.");
                     });
                 });
             } catch (NumberFormatException ex) {
