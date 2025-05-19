@@ -1,5 +1,6 @@
 package icu.grely.bans;
 
+import arc.util.Log;
 import discord4j.common.util.Snowflake;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 
 import static icu.grely.Vars.gateway;
+import static icu.grely.database.DatabaseConnector.unbanUser;
 
 @Getter
 public class Ban {
@@ -44,5 +46,12 @@ public class Ban {
                 rs.getTimestamp("unban_datetime").toInstant(),
                 rs.getInt("ban_id")
         );
+    }
+    public static void handleUnBan(Ban ban) throws SQLException {
+        gateway.getGuildById(Snowflake.of(ban.getGuild_id())).subscribe(g->{
+            g.unban(Snowflake.of(ban.getUser_id()), "Ban expired.").subscribe();
+            unbanUser(ban.getId());
+            Log.info("Unbanned @ in @", ban.getUser_id(), g.getName());
+        });
     }
 }

@@ -22,7 +22,7 @@ public class Moderation {
         setCategory("moderation");
         registerCommand("ban", "ban lil bro", "<ping> <time> <reason...>", (e, args)->{
             if(args.length<3) {
-                sendReply(e.getMessage(), "Нужно указать как минимум участника, время разбана и причину бана!\nВремя принимается так:\n1 - минута\n1h - 1 час\n1d - 1 день \n 1w - 1 неделя\n1m - 1 месяц\n1y - 1 год");
+                sendReply(e.getMessage(), "Нужно указать как минимум участника, время разбана и причину бана!\nВремя принимается так:\n1 - минута\n1h - 1 час\n1d - 1 сутки \n 1w - 1 неделя\n1m - 1 месяц\n1y - 1 год");
                 return;
             }
             long seconds = parseTime(args[1]);

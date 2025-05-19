@@ -206,6 +206,17 @@ public class DatabaseConnector {
                     stmt.setInt(1, ban);
                 });
     }
+    public static void updateBans() {
+        List<Ban> bansToUnban = executeQueryList(
+                "SELECT * FROM BANS WHERE active=true AND unban_datetime < NOW()",
+                stmt -> {},
+                Ban::resultSetToBan
+        );
+
+        for (Ban ban : bansToUnban) {
+            Ban.handleUnBan(ban);
+        }
+    }
     public static void loadSQLCommands() {
         registerCommand("sql", "Execute raw SQL", "<query...>", owner.getId().asLong(), (e, args) -> {
             if (args.length == 0) {

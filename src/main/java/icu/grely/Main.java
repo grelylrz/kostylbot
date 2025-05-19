@@ -9,6 +9,7 @@ import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Timer;
 import icu.grely.bot.Loader;
+import icu.grely.database.DatabaseConnector;
 import icu.grely.logger.LoggerProvider;
 import reactor.util.Loggers;
 
@@ -61,6 +62,9 @@ public class Main {
                 LogBuffer.clear();
             });
         }, 0, 10*60);
+        Timer.schedule(()->{
+            executor.submit(DatabaseConnector::updateBans);
+        }, 0, 60);
         Loader.load();
     }
 
