@@ -9,7 +9,6 @@ public enum CommandCategory {
     unkown("unkown"),
     disable("disable"),
     NSFW("");
-
     String name;
     CommandCategory(String name) {
         this.name=name;

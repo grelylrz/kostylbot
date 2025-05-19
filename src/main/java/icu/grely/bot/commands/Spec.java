@@ -52,6 +52,7 @@ public class Spec {
                     embed.color(Color.RED);
                     embed.addField("Ошибка", "Категория не найдена.", true);
                 } else {
+                    embed.color(Color.SEA_GREEN);
                     for(BotCommand c : commands) {
                         if((c.isActive() && c.isVisible()) && c.getCategory().name.equals(ct.name)) {
                             sb.append(c.getName());
