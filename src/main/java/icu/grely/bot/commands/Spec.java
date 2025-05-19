@@ -187,6 +187,9 @@ public class Spec {
                newf.startThread(t.getName(), ForumThreadMessageCreateSpec.builder().content(t.getLastMessage().block().getContent()).build()).block();
            });
        }).setActive(false);
+       registerCommand("testt", "", (e, args)->{
+           sendReply(e.getMessage(), "success.");
+       }).setPermissions(Permission.ADMINISTRATOR);
     }
     public static void generateDisaibleCommand() {
         setCategory("disable");

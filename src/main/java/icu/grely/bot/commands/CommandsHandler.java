@@ -185,5 +185,12 @@ public class CommandsHandler {
         void setAliases(Seq<String> aliases) {
             this.aliases=aliases;
         }
+
+        void setPermissions(Permission... p) {
+            this.permissions=Seq.with(p);
+        }
+        void setPermissions(Seq<Permission> p) {
+            this.permissions=p;
+        }
     }
 }
