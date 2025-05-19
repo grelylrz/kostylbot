@@ -70,6 +70,10 @@ public class CommandsHandler {
             return;
         User author = authorOpt.get();
         String content = message.getContent();
+        if(content.contains("@everyone")) {
+            sendReply(message, "Я не работаю с сообщениями содержащии пинг эвриван.");
+            return;
+        }
         String firstChars = content.substring(0, 2);
         if(firstChars.toLowerCase().startsWith(prefix) || firstChars.toLowerCase().startsWith(prefixAlias)) {
             String[] args = content.replace(firstChars, "").split(" ");
