@@ -109,7 +109,8 @@ public class CommandsHandler {
                     }
                 }
                 if(command.getMemberID() == 0) {
-                    command.exec(event, Arrays.copyOfRange(args, 1, args.length));
+                    BotCommand finalCommand = command;
+                    executor.submit(()-> finalCommand.exec(event, Arrays.copyOfRange(args, 1, args.length)));
                 } else {
                     try {
                         /*author.asMember(Vars.guild).flatMap(m -> {

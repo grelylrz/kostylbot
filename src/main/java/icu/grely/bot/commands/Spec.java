@@ -46,6 +46,7 @@ public class Spec {
                 sb.setLength(1024);
                 embed.color(Color.SEA_GREEN);
                 embed.addField("Доступные категории", sb.toString(), true);
+                sb.setLength(0);
             } else {
                 CommandCategory ct = parseCategory(args[0]);
                 if(ct.name.equals("unkown")) {
@@ -62,6 +63,7 @@ public class Spec {
                             sb.setLength(0);
                         }
                     }
+                    sb.setLength(0);
                 }
             }
             embed.footer("Команды имеют алиасы, например, help команду можно вызвать написав "+prefix+"help или "+prefix+"хелп.\nПрефикс бота тоже имеет алиасы, команды можно написать вызвав "+prefix+" или "+prefixAlias, "");
