@@ -41,7 +41,7 @@ public class Moderation {
                             pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).subscribe();
                         });
                         g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
-                        sendReply(e.getMessage(), "Success.")
+                        sendReply(e.getMessage(), "Success.");
                     });
                 });
             } catch (NumberFormatException ex) {
