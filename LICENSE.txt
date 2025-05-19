@@ -1,0 +1,11 @@
+Copyright © 2025 grelylrz
+
+All rights reserved.
+
+This software is proprietary and confidential. Unauthorized copying, modification, distribution, or use of this software, in whole or in part, is strictly prohibited without explicit, written permission from the author.
+
+Permission to use this software is granted only to individuals or entities who have received prior written authorization from the copyright holder.
+
+Any attempt to reverse-engineer, decompile, or disassemble this software is strictly forbidden.
+
+For inquiries about usage rights, contact the author directly.
