@@ -25,7 +25,7 @@ public class Moderation {
                 sendReply(e.getMessage(), "Нужно указать как минимум участника, время разбана и причину бана!\nВремя принимается так:\n1 - минута\n1h - 1 час\n1d - 1 день \n 1w - 1 неделя\n1m - 1 месяц\n1y - 1 год");
                 return;
             }
-            long seconds = parseTime(args[2]);
+            long seconds = parseTime(args[1]);
             if (seconds == -1) {
                 sendReply(e.getMessage(), "Неизвестный тип времени, обратитесь к гайду написав команду без аргов.");
                 return;
@@ -34,7 +34,7 @@ public class Moderation {
                 gateway.getUserById(Snowflake.of(Long.parseLong(getIdByPing(args[0])))).subscribe(u->{
                     e.getMessage().getGuild().subscribe(g->{
                         Instant un=Instant.now().plusSeconds(seconds);
-                        String reason = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+                        String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
                         u.getPrivateChannel().subscribe(pr->{
