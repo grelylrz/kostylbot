@@ -59,7 +59,7 @@ public class Spec {
                             sb.append(c.getName());
                             for (String s : c.getAliases())
                                 sb.append("/" + s);
-                            embed.addField(sb.toString(), c.getDescription() + "\n" + c.getArgsN() + (c.isDisailable() ? "" : "\nЭту команду можно отключить!"), true);
+                            embed.addField(sb.toString(), c.getDescription() + "\n" + c.getArgsN() + (c.isDisailable() ? "\nЭту команду можно отключить!" : ""), true);
                             sb.setLength(0);
                         }
                     }

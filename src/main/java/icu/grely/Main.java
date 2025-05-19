@@ -15,6 +15,7 @@ import reactor.util.Loggers;
 import java.nio.LongBuffer;
 
 import static icu.grely.SettingsLoader.saveSettings;
+import static icu.grely.Vars.client;
 import static icu.grely.Vars.executor;
 import static icu.grely.guilds.GuildSave.saveGuilds;
 import static icu.grely.logger.BLogger.*;
