@@ -38,14 +38,15 @@ public class Moderation {
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
                         u.getPrivateChannel().subscribe(pr->{
-                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build());
+                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).subscribe();
                         });
-                        g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build());
+                        g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
+                        sendReply(e.getMessage(), "Success.")
                     });
                 });
             } catch (NumberFormatException ex) {
                 sendReply(e.getMessage(), "Пинг не действителен.");
             }
-        }).setPermissions(Permission.BAN_MEMBERS);
+        }).setPermissions(Permission.BAN_MEMBERS, Permission.ADMINISTRATOR);
     }
 }
