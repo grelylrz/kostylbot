@@ -1,6 +1,9 @@
 package icu.grely.database;
 
 import arc.util.Log;
+import discord4j.core.object.entity.Guild;
+import discord4j.core.object.entity.User;
+import icu.grely.bans.Ban;
 import icu.grely.guilds.GuildSave;
 import icu.grely.guilds.GuildSetting;
 import icu.grely.ranks.UserSave;
@@ -9,6 +12,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 
 import java.sql.*;
+import java.time.Instant;
 import java.util.*;
 
 import static icu.grely.Vars.*;
@@ -151,6 +155,56 @@ public class DatabaseConnector {
                 stmt->{},
                 UserSave::ResultSetToUserSave
         );
+    }
+    public static Optional<Ban> getBan(int id) {
+        return executeQueryAsync("SELECT * FROM bans WHERE id = ?",
+                stmt->stmt.setInt(1, id),
+                Ban::resultSetToBan
+        );
+    }
+    public static boolean banUser(Guild guild, User user, User admin, String reason, Instant unban) {
+        return executeUpdate(
+                "INSERT INTO bans (user_id, admin_id, guild_id, reason, unban_datetime) VALUES" +
+                        " (?, ?, ?, ?, ?)",
+                stmt->{
+                    stmt.setString(1, user.getId().asString());
+                    stmt.setString(2, admin.getId().asString());
+                    stmt.setString(3, guild.getId().asString());
+                    stmt.setString(4, reason);
+                    if(unban!=null)
+                    stmt.setTimestamp(5, java.sql.Timestamp.from(unban));
+                    else
+                        stmt.setNull(5, java.sql.Types.TIMESTAMP);
+                }
+                );
+    }
+    public static boolean banUser(String guildId, String userId, String adminId, String reason, Instant unban) {
+        return executeUpdate(
+                "INSERT INTO bans (user_id, admin_id, guild_id, reason, unban_datetime) VALUES (?, ?, ?, ?, ?)",
+                stmt -> {
+                    stmt.setString(1, userId);
+                    stmt.setString(2, adminId);
+                    stmt.setString(3, guildId);
+                    stmt.setString(4, reason);
+                    if(unban!=null)
+                    stmt.setTimestamp(5, java.sql.Timestamp.from(unban));
+                    else
+                        stmt.setNull(5, java.sql.Types.TIMESTAMP);
+                }
+        );
+    }
+    public static boolean unbanUser(User user, Guild guild) {
+        return executeUpdate("UPDATE bans SET active=false WHERE user_id = ? AND guild_id = ?",
+                stmt->{
+            stmt.setString(1, user.getId().asString());
+            stmt.setString(2, guild.getId().asString());
+                });
+    }
+    public static boolean unbanUser(int ban) {
+        return executeUpdate("UPDATE bans SET active=false WHERE ban_id = ?",
+                stmt->{
+                    stmt.setInt(1, ban);
+                });
     }
     public static void loadSQLCommands() {
         registerCommand("sql", "Execute raw SQL", "<query...>", owner.getId().asLong(), (e, args) -> {

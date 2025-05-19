@@ -9,6 +9,7 @@ import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.discordjson.json.MessageReferenceData;
+import discord4j.rest.util.Permission;
 import icu.grely.Vars;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 import javax.print.DocFlavor;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendMessage;
@@ -110,7 +112,23 @@ public class CommandsHandler {
                 }
                 if(command.getMemberID() == 0) {
                     BotCommand finalCommand = command;
-                    executor.submit(()-> finalCommand.exec(event, Arrays.copyOfRange(args, 1, args.length)));
+                    if(command.getPermissions().isEmpty()) {
+                        executor.submit(() -> finalCommand.exec(event, Arrays.copyOfRange(args, 1, args.length)));
+                    } else {
+                        BotCommand finalCommand1 = command;
+                        AtomicBoolean executed = new AtomicBoolean(false);
+
+                        message.getAuthorAsMember().subscribe(m -> {
+                            m.getRoles().subscribe(role -> {
+                                role.getPermissions().forEach(perm -> {
+                                    if (!executed.get() && finalCommand1.getPermissions().find(p -> p.name().equals(perm.name())) != null) {
+                                        executed.set(true);
+                                        executor.submit(() -> finalCommand.exec(event, Arrays.copyOfRange(args, 1, args.length)));
+                                    }
+                                });
+                            });
+                        });
+                    }
                 } else {
                     try {
                         /*author.asMember(Vars.guild).flatMap(m -> {
@@ -148,6 +166,7 @@ public class CommandsHandler {
         String argsN = "";
         CommandCategory category = CommandCategory.unkown;
         Seq<String> aliases = new Seq<>();
+        Seq<Permission> permissions = new Seq<>();
 
         BotCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
             this.name = name;

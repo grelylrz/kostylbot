@@ -1,5 +1,6 @@
 package icu.grely;
 
+import arc.Core;
 import arc.struct.Seq;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
@@ -20,7 +21,7 @@ public class Vars {
     // spec.
     public static final Dotenv dotenv = Dotenv.load();
     public static final Random random = new Random();
-    public static final ExecutorService executor = Executors.newFixedThreadPool(1);
+    public static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     public static final OkHttpClient Okclient = new OkHttpClient();
     // db
     public static String DB_USER = dotenv.get("DB_USER");
@@ -40,8 +41,8 @@ public class Vars {
     public static String presence="Hello, im kostylbot.";
     public static User owner=null;
     //ranks
-    public static double expScale=18.2;
-    public static long expPerMessage=2;
+    public static double expScale=20.1;
+    public static long expPerMessage=11;
     public static Seq<UserSave> cachedUsers = new Seq<>();
     //guilds
     public static Seq<GuildSave> cachedGuilds = new Seq<>();

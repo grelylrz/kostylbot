@@ -13,6 +13,7 @@ import icu.grely.logger.LoggerProvider;
 import reactor.util.Loggers;
 
 import java.nio.LongBuffer;
+import java.util.concurrent.TimeUnit;
 
 import static icu.grely.SettingsLoader.saveSettings;
 import static icu.grely.Vars.client;
@@ -38,6 +39,16 @@ public class Main {
                 write("logs/log.txt", b);
             }
             LogBuffer.clear();
+
+            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                    executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
         }));
         Timer.schedule(()->{
             Log.info("Saving data!");

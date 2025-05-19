@@ -1,0 +1,48 @@
+package icu.grely.bans;
+
+import discord4j.common.util.Snowflake;
+import lombok.Getter;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Instant;
+
+import static icu.grely.Vars.gateway;
+
+@Getter
+public class Ban {
+    String guild_id, admin_id, user_id, reason;
+    boolean active;
+    Instant unban_date;
+    int id;
+
+    Ban(String guild_id, String admin_id, String user_id, String reason, boolean active, Instant unban, int id) {
+        this.guild_id=guild_id;
+        this.admin_id=admin_id;
+        this.user_id=user_id;
+        this.reason=reason;
+        this.id=id;
+        this.active=active;
+        this.unban_date=unban;
+    }
+
+    public void unban() {
+        gateway.getGuildById(Snowflake.of(this.guild_id)).subscribe(guild->{
+            guild.unban(Snowflake.of(this.user_id), "Ban time has expired").subscribe();
+        });
+    }
+    public boolean isExperied() {
+        return Instant.now().isAfter(this.unban_date);
+    }
+    public static Ban resultSetToBan(ResultSet rs) throws SQLException {
+        return new Ban(
+                rs.getString("guild_id"),
+                rs.getString("admin_id"),
+                rs.getString("user_id"),
+                rs.getString("reason"),
+                rs.getBoolean("active"),
+                rs.getTimestamp("unban_datetime").toInstant(),
+                rs.getInt("ban_id")
+        );
+    }
+}
