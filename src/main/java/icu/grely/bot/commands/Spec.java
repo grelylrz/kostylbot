@@ -2,6 +2,7 @@ package icu.grely.bot.commands;
 
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.*;
+import static icu.grely.bot.commands.CommandCategory.parseCategory;
 import static icu.grely.bot.commands.CommandsHandler.*;
 import static icu.grely.guilds.GuildSave.getGuild;
 import static icu.grely.ranks.UserSave.getUser;
@@ -35,51 +36,35 @@ import java.time.temporal.TemporalUnit;
 public class Spec {
     public static void load() {
         setCategory("spec");
-        registerCommand("help", "Посмотреть список команд.", "[command-name]", (e, args)->{
-            EmbedCreateSpec.Builder em=EmbedCreateSpec.builder().color(Color.SEA_GREEN);
+        registerCommand("help", "Посмотреть список команд.", "[category]", (e, args)->{
+            EmbedCreateSpec.Builder embed = EmbedCreateSpec.builder();
+            StringBuilder sb = new StringBuilder();
             if(args.length==0) {
-                em.title("Список команд.");
-                StringBuilder cname = new StringBuilder();
-                for (CommandsHandler.BotCommand c : commands) {
-                    if (c.isVisible() && c.isActive()) {
-                        cname.append(c.getName());
-                        for (String alias : c.getAliases())
-                            cname.append("/" + alias);
-                        // name/alias1/alias2
-                        if(c.isDisailable())
-                            em.addField(cname.toString(), c.getDescription() + "\n" + c.getArgsN()+"\nЭту команду можно отключить!", false);
-                        else
-                        em.addField(cname.toString(), c.getDescription() + "\n" + c.getArgsN(), false);
-                        cname.setLength(0);
+                for(CommandCategory ct : CommandCategory.values()) {
+                    sb.append(ct.name);
+                }
+                sb.setLength(1024);
+                embed.color(Color.SEA_GREEN);
+                embed.addField("Доступные категории", sb.toString(), true);
+            } else {
+                CommandCategory ct = parseCategory(args[0]);
+                if(ct.name.equals("unkown")) {
+                    embed.color(Color.RED);
+                    embed.addField("Ошибка", "Категория не найдена.", true);
+                } else {
+                    for(BotCommand c : commands) {
+                        if((c.isActive() && c.isVisible()) && c.getCategory().name.equals(ct.name)) {
+                            sb.append(c.getName());
+                            for (String s : c.getAliases())
+                                sb.append("/" + s);
+                            embed.addField(sb.toString(), c.getDescription() + "\n" + c.getArgsN() + (c.isDisailable() ? "" : "\nЭту команду можно отключить!"), true);
+                            sb.setLength(0);
+                        }
                     }
                 }
-                //em.addField("disaible-commandName", "Введите disaible-command заменив command на название команды и вы сможете отключить ее на вашем сервере!", true);
-            } else {
-                CommandsHandler.BotCommand c = commands.find(m->{
-                    return m.name.equals(args[0]);
-                });
-                if(c==null)
-                    c=commands.find(m-> m.getAliases().find(a->a.equals(args[0])) != null);
-                if (c==null) {
-                    sendReply(e.getMessage(), "Command not found.");
-                    return;
-                }
-                if (!c.isVisible() || !c.isActive()) {
-                    sendReply(e.getMessage(), "Command not found.");
-                    return;
-                }
-                em.title("Подробная информация о команде.");
-                StringBuilder cname = new StringBuilder();
-                cname.append(c.name);
-                for(String n : c.getAliases()) {
-                    cname.append("/"+n);
-                }
-                em.addField(c.getAliases().isEmpty() ? "Name" : "Aliases", cname.toString(), false);
-                em.addField("Description", c.getDescription(), false);
-                cname.setLength(0);
             }
-            em.footer("Подсказка: команды имеют алиасы, например, команду help можно вызвать написав "+prefix+"help или "+prefix+"хелп", "");
-            SendUtils.sendEmbedReply(em.build(), e.getMessage());
+            embed.footer("Команды имеют алиасы, например, help команду можно вызвать написав "+prefix+"help или "+prefix+"хелп.\nПрефикс бота тоже имеет алиасы, команды можно написать вызвав "+prefix+" или "+prefixAlias, "");
+            sendEmbedReply(embed.build(), e.getMessage());
         }).setAliases(Seq.with("хелп"));
 
         registerCommand("info", "Посмотреть информацию о боте.", (e, args) -> {
