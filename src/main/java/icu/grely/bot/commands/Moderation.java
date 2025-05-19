@@ -5,6 +5,7 @@ import discord4j.core.object.entity.User;
 import discord4j.core.spec.BanQuerySpec;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Permission;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -38,7 +39,9 @@ public class Moderation {
                         User aut =  e.getMessage().getAuthor().get();
                         banUser(g, u, aut, reason, un);
                         u.getPrivateChannel().subscribe(pr->{
-                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).block();
+                            pr.createMessage(MessageCreateSpec.builder().content("Вы были заблокированы на "+g.getName()+"\nАдминистратор: "+aut.getUsername()+"\nДата разбана <t:"+seconds+">").build()).onErrorResume(r->{
+                                return Mono.empty(); // окей, ну не могу я отправлять сообщения я ему, почему нельзя выполнить код дальше то?
+                            }).block();
                             g.ban(u.getId(), BanQuerySpec.builder().reason(aut.getUsername()+": "+reason).build()).subscribe();
                             sendReply(e.getMessage(), "Success.");
                         });
