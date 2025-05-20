@@ -78,7 +78,7 @@ public class CommandsHandler {
             return;
         User author = authorOpt.get();
         String content = message.getContent();
-        if(content.contains("@everyone") || content.contains("@here")) {
+        if(content.contains("@everyone") || content.contains("@here") || content.contains("<@")) {
             sendReply(message, "Я не работаю с сообщениями содержащими пинг everyone или here");
             return;
         }
