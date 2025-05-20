@@ -173,9 +173,6 @@ public class Spec {
                return Mono.empty();
            }).subscribe();
        }).setVisible(false);
-       registerCommand("testt", "", (e, args)->{
-           sendReply(e.getMessage(), "success.");
-       }).setPermissions(Permission.ADMINISTRATOR);
     }
     public static void generateDisaibleCommand() {
         setCategory("disable");
