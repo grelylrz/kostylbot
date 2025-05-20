@@ -43,7 +43,7 @@ public class CommandsHandler {
         commands.add(c);
         return c;
     }
-    /*обычная+аргсы*/
+    /**обычная+аргсы*/
     public static BotCommand registerCommand(String name, String description, String argsN, BiConsumer<MessageCreateEvent, String[]> executor) {
         BotCommand c = new BotCommand(name, description, executor);
         c.setArgsN(argsN);
@@ -60,7 +60,7 @@ public class CommandsHandler {
     }
     public static void setCategory(String c) {
         CommandCategory ct = CommandCategory.parseCategory(c);
-        if(ct.name.equals(CommandCategory.unkown))
+        if(ct.name.equals(CommandCategory.unkown.name))
             Log.warn("@ is unkown category!", c);
         category=ct;
     }

