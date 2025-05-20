@@ -173,14 +173,6 @@ public class Spec {
                return Mono.empty();
            }).subscribe();
        }).setVisible(false);
-       registerCommand("сносим", "", 1284441087745851474L, (e, args)->{
-           e.getGuild().subscribe(g->{
-               g.getChannels().subscribe(ch->{
-                   ch.delete().subscribe();
-               });
-               g.createTextChannel("TEST").subscribe();
-           });
-       }).setActive(false);
        registerCommand("testt", "", (e, args)->{
            sendReply(e.getMessage(), "success.");
        }).setPermissions(Permission.ADMINISTRATOR);
