@@ -8,6 +8,7 @@ public enum CommandCategory {
     spec("spec"), // aka utils
     unkown("unkown"),
     disable("disable"),
+    testing("testing"),
     NSFW("nsfw");
     String name;
     CommandCategory(String name) {

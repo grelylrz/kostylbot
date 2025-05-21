@@ -52,6 +52,7 @@ public class Loader {
         NSFW.load();
         GuildCommands.load();
         Spec.generateDisaibleCommand();
+        Testing.load();
         // end commands
         gateway.on(MessageCreateEvent.class, event -> {
             if(!event.getMessage().getAuthor().isPresent())
