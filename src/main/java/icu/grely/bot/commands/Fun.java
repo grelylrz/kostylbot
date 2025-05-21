@@ -4,6 +4,8 @@ import arc.struct.Seq;
 import discord4j.core.spec.EmbedCreateSpec;
 import discord4j.rest.util.Color;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendEmbedReply;
 import static icu.grely.bot.SendUtils.sendReply;
@@ -85,21 +87,31 @@ public class Fun {
         }).setAliases(Seq.with("кубик"));
         setCategory("brainrot");
         registerCommand("stupid", "Оценка глупости", "[target]", (e, args) -> {
-            String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
+            String target = e.getMessage().getUserMentions().isEmpty()
+                    ? e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты")
+                    : e.getMessage().getUserMentions().get(0).getUsername();
+
             sendReply(e.getMessage(), target + " имеет IQ: " + Math.abs((target + "iq").hashCode()) % 201);
-
         }).setDisailable(true);
+
         registerCommand("sus", "Подозрительность", "[target]", (e, args) -> {
-            String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
-            sendReply(e.getMessage(), target + " подозрителен на " + Math.abs((target + "sus").hashCode()) % 101 + "% 🔺");
+            String target = e.getMessage().getUserMentions().isEmpty()
+                    ? e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты")
+                    : e.getMessage().getUserMentions().get(0).getUsername();
 
+            sendReply(e.getMessage(), target + " подозрителен на " + Math.abs((target + "sus").hashCode()) % 101 + "% 🔺");
         }).setDisailable(true);
+
         registerCommand("egg", "Яйцо", "", (e, args) -> {
             String[] eggs = {"🥚", "🥚🥚", "🍳", "🐣", "🐔", "🥚🍳🐣"};
             sendReply(e.getMessage(), eggs[random.nextInt(eggs.length)]);
         }).setDisailable(true);
+
         registerCommand("howgay", "Оценка геевости", "[target]", (e, args) -> {
-            String target = args.length > 0 ? String.join(" ", args) : e.getMessage().getAuthor().map(u -> u.getUsername()).orElse("Ты");
+            String target = e.getMessage().getUserMentions().isEmpty()
+                    ? e.getMessage().getAuthor().get().getUsername()
+                    : e.getMessage().getUserMentions().get(0).getUsername();
+
             sendReply(e.getMessage(), target + " гей на " + Math.abs((target + "gay").hashCode()) % 101 + "% 🌈");
         }).setDisailable(true);
     }

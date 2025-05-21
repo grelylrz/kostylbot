@@ -78,12 +78,11 @@ public class CommandsHandler {
             return;
         User author = authorOpt.get();
         String content = message.getContent();
-        if(content.contains("@everyone") || content.contains("@here") || content.contains("<@")) {
-            sendReply(message, "Я не работаю с сообщениями содержащими пинг everyone или here");
-            return;
-        }
         String firstChars = content.substring(0, 2);
         if(firstChars.toLowerCase().startsWith(prefix) || firstChars.toLowerCase().startsWith(prefixAlias)) {
+            /*if(content.contains("@everyone") || content.contains("@here") || (content.contains("<@&") && content.contains(">"))) {
+                return;
+            }*/
             String[] args = content.replace(firstChars, "").split(" ");
             BotCommand command = commands.find(c->{
                 return c.getName().equals(args[0]) && c.isActive();
