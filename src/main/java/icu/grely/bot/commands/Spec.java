@@ -41,7 +41,8 @@ public class Spec {
             StringBuilder sb = new StringBuilder();
             if(args.length==0) {
                 for(CommandCategory ct : CommandCategory.values()) {
-                    sb.append(ct.name+"\n");
+                    if(ct.visilbe)
+                        sb.append(ct.name+"\n");
                 }
                 sb.setLength(1024);
                 embed.color(Color.SEA_GREEN);

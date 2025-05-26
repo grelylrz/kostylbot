@@ -25,11 +25,12 @@ import java.util.function.BiConsumer;
 import static icu.grely.Vars.*;
 import static icu.grely.bot.SendUtils.sendMessage;
 import static icu.grely.bot.SendUtils.sendReply;
+import static icu.grely.bot.commands.CommandCategory.unkown;
 import static icu.grely.guilds.GuildSave.getGuild;
 
 public class CommandsHandler {
     public static Seq<BotCommand> commands = new Seq<>();
-    private static CommandCategory category;
+    private static CommandCategory category = unkown;
     /**Зарегестрировать обычную команду.*/
     public static BotCommand registerCommand(String name, String description, BiConsumer<MessageCreateEvent, String[]> executor) {
         BotCommand c = new BotCommand(name, description, executor);
@@ -60,7 +61,7 @@ public class CommandsHandler {
     }
     public static void setCategory(String c) {
         CommandCategory ct = CommandCategory.parseCategory(c);
-        if(ct.name.equals(CommandCategory.unkown.name))
+        if(ct.name.equals(unkown.name))
             Log.warn("@ is unkown category!", c);
         category=ct;
     }
@@ -163,7 +164,7 @@ public class CommandsHandler {
         long memberID;
         boolean visible = true, active = true, disailable = false, disable = false/*Команда ЧЕРЕЗ которую отключаются/включаются другие*/;
         String argsN = "";
-        CommandCategory category = CommandCategory.unkown;
+        CommandCategory category = unkown;
         Seq<String> aliases = new Seq<>();
         Seq<Permission> permissions = new Seq<>();
 

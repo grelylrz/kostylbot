@@ -5,10 +5,12 @@ import discord4j.core.object.entity.channel.GuildMessageChannel;
 import static icu.grely.Vars.owner;
 import static icu.grely.bot.SendUtils.sendReply;
 import static icu.grely.bot.commands.CommandsHandler.registerCommand;
+import static icu.grely.bot.commands.CommandsHandler.setCategory;
 import static icu.grely.guilds.GuildSave.getGuild;
 
 public class GuildCommands {
     public static void load() {
+        setCategory("testing");
         registerCommand("guild-test", "dont use", owner.getId().asLong(), (e, args)->{
             e.getMessage().getChannel().ofType(GuildMessageChannel.class).subscribe(ch->{
                 String id = ch.getGuildId().asString();

@@ -8,11 +8,17 @@ public enum CommandCategory {
     spec("spec"), // aka utils
     unkown("unkown"),
     disable("disable"),
-    testing("testing"),
+    testing("testing", false),
     NSFW("nsfw");
     String name;
+    boolean visilbe;
     CommandCategory(String name) {
         this.name=name;
+        this.visilbe=true;
+    }
+    CommandCategory(String name, boolean visible) {
+        this.name=name;
+        this.visilbe=visible;
     }
 
     public static CommandCategory parseCategory(String name) {
