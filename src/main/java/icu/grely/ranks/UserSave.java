@@ -21,7 +21,6 @@ import static java.lang.Math.sqrt;
 public class UserSave {
     String id;
     long exp;
-    float socialCredit;
 
     /**
      * @return лвл по формуле √exp/expScale=lvl
@@ -31,22 +30,20 @@ public class UserSave {
         return (int)Math.sqrt(exp / expScale);
     }
 
-    public UserSave(String id, long exp, float meeooooooooooooooooooooooooow){
+    public UserSave(String id, long exp){
         this.id=id;
         this.exp=exp;
-        this.socialCredit=meeooooooooooooooooooooooooow;
     }
     public static UserSave ResultSetToUserSave(ResultSet rs) throws SQLException {
          return new UserSave(
                  rs.getString("id"),
-                 rs.getLong("exp"),
-                 rs.getFloat("social_credit")
+                 rs.getLong("exp")
          );
     }
     public synchronized static void saveUsers() {
          // Log.info("Saving cached users to db!");
          for(UserSave u : cachedUsers) {
-             createOrUpdateUser(u.getId(), u.getExp(), u.getSocialCredit());
+             createOrUpdateUser(u.getId(), u.getExp());
          }
          cachedUsers.clear();
          // Log.info("Cached users saved!");
@@ -57,7 +54,7 @@ public class UserSave {
         if(us==null) {
             usopt = createOrGetUser(id);
             if (!usopt.isPresent())
-                us = new UserSave(id, 0, 0);
+                us = new UserSave(id, 0);
             else
                 us=usopt.get();
         }

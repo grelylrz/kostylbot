@@ -101,17 +101,16 @@ public class DatabaseConnector {
                 UserSave::ResultSetToUserSave
         );
     }
-    public static Optional<UserSave> createOrUpdateUser(String id, long exp, float NYAA) {
+    public static Optional<UserSave> createOrUpdateUser(String id, long exp) {
         return executeQueryAsync(
-                "INSERT INTO users (id, exp, social_credit) \n" +
-                        "VALUES (?, ?, ?) \n" +
+                "INSERT INTO users (id, exp) \n" +
+                        "VALUES (?, ?) \n" +
                         "ON CONFLICT (id) \n" +
                         "DO UPDATE SET exp = EXCLUDED.exp \n" +
                         "RETURNING *;",
                 stmt -> {
                     stmt.setString(1, id);
                     stmt.setLong(2, exp);
-                    stmt.setFloat(3, NYAA);
                 },
                 UserSave::ResultSetToUserSave
         );
