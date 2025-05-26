@@ -33,7 +33,7 @@ public class GuildCommands {
             e.getMessage().getRoleMentions().subscribe(r->{
                 e.getGuild().subscribe(g->{
                     g.getMembers().subscribe(m->{
-                        m.addRole(r.getId(), "add-role command used.");
+                        m.addRole(r.getId(), "add-role command used.").subscribe();
                     });
                 });
             });
