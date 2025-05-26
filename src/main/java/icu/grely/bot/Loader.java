@@ -2,6 +2,7 @@ package icu.grely.bot;
 
 import arc.util.Log;
 import discord4j.core.DiscordClient;
+import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.TextChannel;
@@ -12,6 +13,7 @@ import discord4j.core.shard.GatewayBootstrap;
 import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
 import icu.grely.bot.commands.*;
+import icu.grely.bot.join.JoinRole;
 import icu.grely.database.DatabaseConnector;
 import icu.grely.bot.commands.GuildCommands;
 import icu.grely.ranks.UserSave;
@@ -83,6 +85,10 @@ public class Loader {
             // ReputationHandler.handle(event);
             return Mono.empty();
         }).subscribe();
+        gateway.on(MemberJoinEvent.class, e->{
+            JoinRole.handle(e);
+            return Mono.empty();
+        });
         Log.info("Finally, bot can handle messages.");
         gateway.onDisconnect().doFinally(t->{
             Log.info("Bot disconnected!");
