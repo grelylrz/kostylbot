@@ -16,7 +16,7 @@ public class Testing {
         registerCommand("guilds", "", owner.getId().asLong(), (e, args)->{
             EmbedCreateSpec.Builder em = EmbedCreateSpec.builder();
             gateway.getGuilds().subscribe(s->{
-                em.addField(s.getName(), s.getMembers().count()+s.getOwner().block().getUsername(), true);
+                em.addField(s.getName(), "u: "+s.getMembers().count().block()+" own: "+s.getOwner().block().getUsername(), true);
             });
             sendEmbedReply(em.build(), e.getMessage());
         });
