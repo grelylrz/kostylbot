@@ -61,7 +61,22 @@ public class GuildSave {
     public static void saveGuilds() {
         for(GuildSave g : cachedGuilds) {
             for(GuildSetting gs : g.getSettings()) {
-                createGuildSettingOrUpdate(g.getId(), gs.getKey(), gs.getValue().toString(), gs.getValue().getClass().getSimpleName());
+                if (!gs.getValue().getClass().getSimpleName().contains("Snowflake")) {
+                    createGuildSettingOrUpdate(
+                            g.getId(),
+                            gs.getKey(),
+                            gs.getValue().toString(),
+                            gs.getValue().getClass().getSimpleName()
+                    );
+                } else {
+                    Snowflake snowflake = (Snowflake) gs.getValue();
+                    createGuildSettingOrUpdate(
+                            g.getId(),
+                            gs.getKey(),
+                            snowflake.asString(),
+                            gs.getValue().getClass().getSimpleName()
+                    );
+                }
             }
         }
         cachedGuilds.clear();
