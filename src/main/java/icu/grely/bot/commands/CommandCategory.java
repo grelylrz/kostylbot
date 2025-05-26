@@ -9,6 +9,7 @@ public enum CommandCategory {
     unkown("unkown"),
     disable("disable"),
     testing("testing", false),
+    guilds("guildcommands"),
     NSFW("nsfw");
     String name;
     boolean visilbe;

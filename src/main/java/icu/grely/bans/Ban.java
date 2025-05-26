@@ -28,11 +28,6 @@ public class Ban {
         this.unban_date=unban;
     }
 
-    public void unban() {
-        gateway.getGuildById(Snowflake.of(this.guild_id)).subscribe(guild->{
-            guild.unban(Snowflake.of(this.user_id), "Ban time has expired").subscribe();
-        });
-    }
     public boolean isExperied() {
         return Instant.now().isAfter(this.unban_date);
     }

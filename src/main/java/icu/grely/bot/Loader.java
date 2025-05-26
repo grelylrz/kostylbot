@@ -13,8 +13,7 @@ import discord4j.gateway.GatewayOptions;
 import discord4j.gateway.intent.IntentSet;
 import icu.grely.bot.commands.*;
 import icu.grely.database.DatabaseConnector;
-import icu.grely.guilds.GuildCommands;
-import icu.grely.ranks.ReputationHandler;
+import icu.grely.bot.commands.GuildCommands;
 import icu.grely.ranks.UserSave;
 import reactor.core.publisher.Mono;
 
