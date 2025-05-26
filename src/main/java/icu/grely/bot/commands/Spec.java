@@ -73,6 +73,11 @@ public class Spec {
 
         registerCommand("info", "Посмотреть информацию о боте.", (e, args) -> {
             long heapUsed = Core.app.getJavaHeap() / (1024 * 1024);
+            long uptime = System.currentTimeMillis() - startedOn;
+            StringBuilder start = new StringBuilder();
+            if (uptime >= 86400000) start.append(uptime / 86400000).append("d ");
+            if (uptime >= 3600000) start.append((uptime / 3600000) % 24).append("h ");
+            start.append((uptime / 1000) % 60).append("s");
             sendReply(e.getMessage(),
                     "Команд обработано: " + handledCommands +
                             "\nСообщений обработано: " + handledMessages +
@@ -80,6 +85,7 @@ public class Spec {
                             "\nСерверов: " + gateway.getGuilds().count().block() +
                             "\nRAM Used: " + heapUsed + "MB" +
                             "\nВладелец бота: " + owner.getUsername()
+                            +"\nРаботаю уже: " + start.toString().trim()
             );
         }).setAliases("stats", "стата");
 
